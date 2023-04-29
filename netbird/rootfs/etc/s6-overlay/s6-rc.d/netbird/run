@@ -1,0 +1,52 @@
+#!/command/with-contenv bashio
+# ==============================================================================
+# Home Assistant Community Add-on: NetBird Client
+# Runs NetBird Client
+# ==============================================================================
+declare -a options
+
+# Get the options configured in HASS GUI
+readonly CONFIG_PATH=/config/netbird/config.json
+admin_url="$(bashio::config 'admin_url')"
+management_url="$(bashio::config 'management_url')"
+setup_key="$(bashio::config 'setup_key')"
+hostname="$(bashio::config 'hostname')"
+
+options+=(--foreground-mode)
+options+=(--config ${CONFIG_PATH})
+options+=(--log-level $(bashio::config 'log_level'))
+
+if [ "${admin_url}" = "" ]; then
+    bashio::log.info "Using Default Admin URL"
+else
+    bashio::log.info "Using ${admin_url} as Admin URL"
+    options+=(--admin-url "${admin_url}")
+fi
+
+if [ "${management_url}" = "" ]; then
+    bashio::log.info "Using Default Management URL"
+else
+    bashio::log.info "Using ${management_url} as Management URL"
+    options+=(--management-url "${management_url}")
+fi
+
+if [ "${setup_key}" = "" ]; then
+    bashio::log.info "No Setup Key Set"
+    bashio::log.info "This client will only show up in dashboards it's already registered with."
+else
+    bashio::log.info "Using ${setup_key} as Setup Key"
+    options+=(--setup-key "${setup_key}")
+fi
+
+if [ "${hostname}" = "" ]; then
+    bashio::log.info "No Hostname Set"
+    bashio::log.info "This client will use the default (<docker container id>-netbird-client) as hostname in peers."
+else
+    bashio::log.info "Using ${hostname} as hostname"
+    options+=(--hostname "${hostname}")
+fi
+
+bashio::log.info "Starting NetBird Client..."
+bashio::log.info "netbird up ${options[@]}"
+netbird up "${options[@]}"
+

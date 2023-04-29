@@ -1,0 +1,32 @@
+---
+configuration:
+  log_level:
+    name: Log level
+    description: The amount of logging the add-on should do.
+  admin_url:
+    name: Admin Panel URL
+    description: >-
+      Admin Panel URL [http|https]://[host]:[port] (default "https://app.netbird.io")
+
+      Tells NetBird the URL through which you administrate your NetBird clients.
+      You'll find that the log generates a login URL you can use instead of configuring a `setup_key`.
+      (If you're not already connected to a NetBird instance.)
+  management_url:
+    name: Management URL
+    description: >-
+      Management Service URL [http|https]://[host]:[port] (default "https://api.wiretrustee.com:33073")
+
+      The client will use this URL to communicate with your NetBird instance api.
+  setup_key:
+    name: Setup Key
+    description: >-
+      Setup key obtained from the Management Service Dashboard (used to register peer)
+      This token is like a password for connecting your client to NetBird, you can 
+      leave this option empty if you would prefer to login via a URL generated in 
+      the log with the `admin_url`.
+  hostname:
+    name: Hostname
+    description: >-
+      Hostname of the client (default "netbird-client")
+      
+      This is the name of the client that will be displayed in the NetBird dashboard.
