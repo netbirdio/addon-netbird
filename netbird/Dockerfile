@@ -6,7 +6,7 @@ FROM ${BUILD_FROM}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ARG BUILD_ARCH=amd64
-ARG NETBIRD_VERSION="0.17.0"
+ARG NETBIRD_VERSION="0.18.0"
 # hadolint ignore=DL3003
 RUN \
     NB_ARCH="${BUILD_ARCH}" \
