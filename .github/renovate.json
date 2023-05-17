@@ -31,7 +31,7 @@
         "ARG NETBIRD_VERSION=[\"']?(?<currentValue>.+?)[\"']?\\s+"
       ],
       "datasourceTemplate": "github-releases",
-      "depNameTemplate": "netbird/netbird"
+      "depNameTemplate": "netbirdio/netbird"
     }
   ],
   "packageRules": [
@@ -51,7 +51,7 @@
     },
     {
       "matchDatasources": ["github-releases"],
-      "matchDepNames": ["netbird/netbird"],
+      "matchDepNames": ["netbirdio/netbird"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     }
