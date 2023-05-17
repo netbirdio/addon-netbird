@@ -7,7 +7,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
 ARG BUILD_ARCH=amd64
-ARG NETBIRD_VERSION="0.21.1"
+ARG NETBIRD_VERSION="0.20.1"
 # hadolint ignore=DL3003
 RUN \
     ARCH="${BUILD_ARCH}" \
