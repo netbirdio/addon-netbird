@@ -1,17 +1,18 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/base:13.2.2
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:14.0.0
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# Setup base
 ARG BUILD_ARCH=amd64
 ARG NETBIRD_VERSION="0.21.1"
 # hadolint ignore=DL3003
 RUN \
     NB_ARCH="${BUILD_ARCH}" \
-    && if [ "${BUILD_ARCH}" = "aarch64" ]; then NB_ARCH="arm64"; \
-    elif [ "${BUILD_ARCH}" = "armhf" ]; then NB_ARCH="armv6"; fi \
+    && if [ "${BUILD_ARCH}" == "aarch64" ]; then NB_ARCH="arm64"; \
+    elif [ "${BUILD_ARCH}" == "armhf" ]; then NB_ARCH="armv6"; fi \
     && curl -L -s "https://github.com/netbirdio/netbird/releases/download/v${NETBIRD_VERSION}/netbird_${NETBIRD_VERSION}_linux_${NB_ARCH}.tar.gz" \
     | tar xzvpf - -C /usr/bin/ netbird
 
@@ -33,11 +34,11 @@ LABEL \
     io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
-    maintainer="Franck Nijhof <frenck@addons.community>" \
+    maintainer="Levente Farkas <lfarkas@lfarekas.org>" \
     org.opencontainers.image.title="${BUILD_NAME}" \
     org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
     org.opencontainers.image.vendor="Home Assistant Community Add-ons" \
-    org.opencontainers.image.authors="Franck Nijhof <frenck@addons.community>" \
+    org.opencontainers.image.authors="Levente Farkas <lfarkas@lfarekas.org>" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.url="https://addons.community" \
     org.opencontainers.image.source="https://github.com/${BUILD_REPOSITORY}" \
