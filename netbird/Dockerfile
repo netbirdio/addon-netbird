@@ -10,10 +10,10 @@ ARG BUILD_ARCH=amd64
 ARG NETBIRD_VERSION="0.21.1"
 # hadolint ignore=DL3003
 RUN \
-    NB_ARCH="${BUILD_ARCH}" \
-    && if [ "${BUILD_ARCH}" == "aarch64" ]; then NB_ARCH="arm64"; \
-    elif [ "${BUILD_ARCH}" == "armhf" ]; then NB_ARCH="armv6"; fi \
-    && curl -L -s "https://github.com/netbirdio/netbird/releases/download/v${NETBIRD_VERSION}/netbird_${NETBIRD_VERSION}_linux_${NB_ARCH}.tar.gz" \
+    ARCH="${BUILD_ARCH}" \
+    && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
+    && if [ "${BUILD_ARCH}" = "armhf" ]; then ARCH="armv6"; fi \
+    && curl -L -s "https://github.com/netbirdio/netbird/releases/download/v${NETBIRD_VERSION}/netbird_${NETBIRD_VERSION}_linux_${ARCH}.tar.gz" \
     | tar xzvpf - -C /usr/bin/ netbird
 
 # Copy root filesystem
