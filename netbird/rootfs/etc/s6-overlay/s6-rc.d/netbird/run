@@ -12,7 +12,7 @@ management_url="$(bashio::config 'management_url')"
 setup_key="$(bashio::config 'setup_key')"
 hostname="$(bashio::config 'hostname')"
 
-options+=(--foreground-mode)
+#options+=(--foreground-mode)
 options+=(--config ${CONFIG_PATH})
 options+=(--log-level $(bashio::config 'log_level'))
 
@@ -49,4 +49,3 @@ fi
 bashio::log.info "Starting NetBird Client..."
 bashio::log.info "netbird up ${options[@]}"
 netbird up "${options[@]}"
-
