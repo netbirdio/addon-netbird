@@ -21,12 +21,11 @@ configuration:
     name: Setup Key
     description: >-
       Setup key obtained from the Management Service Dashboard (used to register peer)
-      This token is like a password for connecting your client to NetBird, you can 
-      leave this option empty if you would prefer to login via a URL generated in 
+      This token is like a password for connecting your client to NetBird, you can
+      leave this option empty if you would prefer to login via a URL generated in
       the log with the `admin_url`.
   hostname:
     name: Hostname
     description: >-
       Hostname of the client (default "netbird-client")
-      
       This is the name of the client that will be displayed in the NetBird dashboard.

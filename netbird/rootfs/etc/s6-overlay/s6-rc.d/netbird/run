@@ -11,6 +11,7 @@ admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
 setup_key="$(bashio::config 'setup_key')"
 hostname="$(bashio::config 'hostname')"
+log_level="$(bashio::config 'log_level')"
 
 options+=(--foreground-mode)
 options+=(--config ${CONFIG_PATH})
@@ -43,6 +44,14 @@ if [ "${hostname}" = "" ]; then
 else
     bashio::log.info "Using ${hostname} as hostname"
     options+=(--hostname "${hostname}")
+fi
+
+if [ "${log_level}" = "" ]; then
+    bashio::log.info "No log level Set"
+    bashio::log.info "This client will use the default logging."
+else
+    bashio::log.info "Using ${log_level} as logging level"
+    options+=(--log-level "${log_level}")
 fi
 
 bashio::log.info "Starting NetBird Client..."

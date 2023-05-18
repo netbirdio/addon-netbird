@@ -1,8 +1,8 @@
 ---
 name: NetBird
-version: 0.20.1
+version: dev
 slug: netbird
-description: Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls.
+description: Connect your devices into a single secure private WireGuard®-based mesh network.
 url: https://github.com/lfarkas/addon-netbird
 codenotary: lfarkas@lfarkas.org
 startup: services
