@@ -7,6 +7,9 @@ url: https://github.com/lfarkas/addon-netbird
 codenotary: lfarkas@lfarkas.org
 startup: services
 panel_icon: mdi:vpn
+#ingress: true
+#ngress_port: 0
+#ingress_stream: true
 init: false
 arch:
   - aarch64
@@ -15,6 +18,7 @@ arch:
   - armv7
   - i386
 host_network: true
+host_dbus: true
 privileged:
   - NET_ADMIN
 map:
