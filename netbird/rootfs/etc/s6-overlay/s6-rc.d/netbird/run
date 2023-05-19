@@ -46,7 +46,7 @@ else
     options+=(--hostname "${hostname}")
 fi
 
-if [ "${log_level}" = "" ]; then
+if [ "${log_level}" = "" ] || [ "${log_level}" = "null" ]; then
     bashio::log.info "No log level Set"
     bashio::log.info "This client will use the default logging."
 else
