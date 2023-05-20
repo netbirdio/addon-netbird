@@ -1,6 +1,5 @@
-# Home Assistant Community Add-on: NetBird
+# Home Assistant Add-on: NetBird
 
-[![GitHub Release][releases-shield]][releases]
 ![Project Stage][project-stage-shield]
 [![License][license-shield]](LICENSE.md)
 
@@ -13,13 +12,6 @@
 [![Github Actions][github-actions-shield]][github-actions]
 ![Project Maintenance][maintenance-shield]
 [![GitHub Activity][commits-shield]][commits]
-
-[![Discord][discord-shield]][discord]
-[![Community Forum][forum-shield]][forum]
-
-[![Sponsor Frenck via GitHub Sponsors][github-sponsors-shield]][github-sponsors]
-
-[![Support Frenck on Patreon][patreon-shield]][patreon]
 
 NetBird Client add-on by Community Home Assistant add-ons.
 
@@ -53,30 +45,13 @@ You could also [open an issue here][issue] GitHub.
 This is an active open-source project. We are always open to people who want to
 use the code or contribute to it.
 
-We have set up a separate document containing our
-[contribution guidelines](.github/CONTRIBUTING.md).
-
 Thank you for being involved! :heart_eyes:
-
-## Authors & contributors
-
-The original setup of this repository is by [Franck Nijhof][frenck].
-
-For a full list of all authors and contributors,
-check [the contributor's page][contributors].
-
-## We have got some Home Assistant add-ons for you
-
-Want some more functionality to your Home Assistant instance?
-
-We have created multiple add-ons for Home Assistant. For a full list, check out
-our [GitHub Repository][repository].
 
 ## License
 
 MIT License
 
-Copyright (c) 2017-2023 Franck Nijhof
+Copyright (c) 2023-2023 Levente Farkas
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -101,27 +76,16 @@ SOFTWARE.
 [armhf-shield]: https://img.shields.io/badge/armhf-yes-green.svg
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-green.svg
 [commits-shield]: https://img.shields.io/github/commit-activity/y/hassio-addons/addon-netbird.svg
-[commits]: https://github.com/hassio-addons/addon-netbird/commits/main
-[contributors]: https://github.com/hassio-addons/addon-netbird/graphs/contributors
+[commits]: https://github.com/lfarkas/addon-netbird/commits/main
 [discord-ha]: https://discord.gg/c5DvZ4e
-[discord-shield]: https://img.shields.io/discord/478094546522079232.svg
 [discord]: https://discord.me/hassioaddons
-[docs]: https://github.com/hassio-addons/addon-netbird/blob/main/netbird/DOCS.md
-[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
-[forum]: https://community.home-assistant.io/t/repository-community-hass-io-add-ons/24705?u=frenck
-[frenck]: https://github.com/frenck
-[github-actions-shield]: https://github.com/hassio-addons/addon-netbird/workflows/CI/badge.svg
-[github-actions]: https://github.com/hassio-addons/addon-netbird/actions
-[github-sponsors-shield]: https://frenck.dev/wp-content/uploads/2019/12/github_sponsor.png
-[github-sponsors]: https://github.com/sponsors/frenck
+[docs]: https://github.com/lfarkas/addon-netbird/blob/main/netbird/DOCS.md
+[forum]: https://community.home-assistant.io/t/repository-community-hass-io-add-ons/24705
+[github-actions-shield]: https://github.com/lfarkas/addon-netbird/workflows/CI/badge.svg
+[github-actions]: https://github.com/lfarkas/addon-netbird/actions
 [i386-shield]: https://img.shields.io/badge/i386-yes-green.svg
-[issue]: https://github.com/hassio-addons/addon-netbird/issues
-[license-shield]: https://img.shields.io/github/license/hassio-addons/addon-netbird.svg
+[issue]: https://github.com/lfarkas/addon-netbird/issues
+[license-shield]: https://img.shields.io/github/license/lfarkas/addon-netbird.svg
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2023.svg
-[patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
-[patreon]: https://www.patreon.com/frenck
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-experimental-yellow.svg
 [reddit]: https://reddit.com/r/homeassistant
-[releases-shield]: https://img.shields.io/github/release/hassio-addons/addon-netbird.svg
-[releases]: https://github.com/hassio-addons/addon-netbird/releases
-[repository]: https://github.com/hassio-addons/repository

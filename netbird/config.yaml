@@ -15,10 +15,8 @@ arch:
   - armv7
   - i386
 host_network: true
-host_dbus: true
 privileged:
   - NET_ADMIN
-  - SYS_ADMIN
 map:
   - config:rw
 options:
