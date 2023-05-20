@@ -49,14 +49,14 @@ you are troubleshooting.
 
 ### Option: `admin_url`
 
-Admin Panel URL [http|https]://[host]:[port] (default "https://app.netbird.io")
+Admin Panel URL [http|https]://[host]:[port] (default "<https://app.netbird.io>")
 
 Tells NetBird the URL through which you administrate your NetBird clients.
 You'll find that the log generates a login URL you can use instead of configuring a `setup_key`. (If you're not already connected to a NetBird instance.)
 
 ### Option: `management_url`
 
-Management Service URL [http|https]://[host]:[port] (default "https://api.wiretrustee.com:33073")
+Management Service URL [http|https]://[host]:[port] (default "<https://api.wiretrustee.com:33073>")
 
 The client will use this URL to communicate with your NetBird instance api.
 
@@ -103,7 +103,7 @@ You could also [open an issue here][issue] GitHub.
 
 ## Authors & contributors
 
-The original setup of this repository was by [Levente Farkas][lfarkas], forked from [Daniel Burgess][dannymate], forked from [Franck Nijhof][frenck]'s [Zerotier-One add-on][zt-one-addon].
+The original setup of this repository was by [Levente Farkas][lfarkas].
 
 For a full list of all authors and contributors,
 check [the contributor's page][contributors].
@@ -139,8 +139,7 @@ SOFTWARE.
 [contributors]: https://github.com/hassio-addons/addon-netbird/graphs/contributors
 [discord-ha]: https://discord.gg/c5DvZ4e
 [discord]: https://discord.me/hassioaddons
-[forum]: https://community.home-assistant.io/t/repository-community-hass-io-add-ons/24705?u=frenck
-[frenck]: https://github.com/frenck
+[forum]: https://community.home-assistant.io/t/repository-community-hass-io-add-ons/24705
 [issue]: https://github.com/hassio-addons/addon-netbird/issues
 [reddit]: https://reddit.com/r/homeassistant
 [releases]: https://github.com/hassio-addons/addon-netbird/releases
