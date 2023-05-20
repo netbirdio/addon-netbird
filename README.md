@@ -81,7 +81,6 @@ SOFTWARE.
 [discord]: https://discord.me/hassioaddons
 [docs]: https://github.com/lfarkas/addon-netbird/blob/main/netbird/DOCS.md
 [forum]: https://community.home-assistant.io/t/repository-community-hass-io-add-ons/24705
-[github-actions-shield]: https://github.com/lfarkas/addon-netbird/workflows/CI/badge.svg
 [github-actions]: https://github.com/lfarkas/addon-netbird/actions
 [i386-shield]: https://img.shields.io/badge/i386-yes-green.svg
 [issue]: https://github.com/lfarkas/addon-netbird/issues
