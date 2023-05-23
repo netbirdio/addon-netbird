@@ -28,7 +28,17 @@
     {
       "fileMatch": ["/Dockerfile$"],
       "matchStrings": [
-        "ARG NETBIRD_VERSION=[\"']?(?<currentValue>.+?)[\"']?\\s+"
+        "ARG BUILD_VERSION=[\"']?(?<currentValue>.+?)[\"']?\\s+"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "netbirdio/netbird"
+    },
+    {
+      "fileMatch": [
+        "/config.yaml$"
+      ],
+      "matchStrings": [
+        "version:\\s+[\"']?(?<currentValue>.+?)[\"']?\\s+"
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "netbirdio/netbird"
