@@ -7,13 +7,12 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
 ARG BUILD_ARCH=amd64
-ARG NETBIRD_VERSION="v0.20.3"
 # hadolint ignore=DL3003
 RUN \
     ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
     && if [ "${BUILD_ARCH}" = "armhf" ]; then ARCH="armv6"; fi \
-    && curl -L -s "https://github.com/netbirdio/netbird/releases/download/${NETBIRD_VERSION}/netbird_${NETBIRD_VERSION#v}_linux_${ARCH}.tar.gz" \
+    && curl -L -s "https://github.com/netbirdio/netbird/releases/download/v${BUILD_VERSION}/netbird_${BUILD_VERSION}_linux_${ARCH}.tar.gz" \
     | tar xzvpf - -C /usr/bin/ netbird
 
 # Copy root filesystem
