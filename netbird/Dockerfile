@@ -7,6 +7,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
 ARG BUILD_ARCH=amd64
+ARG BUILD_VERSION
 # hadolint ignore=DL3003
 RUN \
     ARCH="${BUILD_ARCH}" \
@@ -26,7 +27,6 @@ ARG BUILD_DESCRIPTION
 ARG BUILD_NAME
 ARG BUILD_REF
 ARG BUILD_REPOSITORY
-ARG BUILD_VERSION
 
 # Labels
 LABEL \
