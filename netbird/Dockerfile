@@ -13,7 +13,7 @@ RUN \
     ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
     && if [ "${BUILD_ARCH}" = "armhf" ]; then ARCH="armv6"; fi \
-    && curl -L -s "https://github.com/netbirdio/netbird/releases/download/v${BUILD_VERSION}/netbird_${BUILD_VERSION}_linux_${ARCH}.tar.gz" \
+    && curl -L -s "https://github.com/netbirdio/netbird/releases/download/${BUILD_VERSION}/netbird_${BUILD_VERSION#v}_linux_${ARCH}.tar.gz" \
     | tar xzvpf - -C /usr/bin/ netbird
 
 # Copy root filesystem
