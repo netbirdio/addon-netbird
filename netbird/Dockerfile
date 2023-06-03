@@ -11,14 +11,17 @@ ARG BUILD_VERSION
 # hadolint ignore=DL3003
 RUN \
     apk add --no-cache \
-    nftables=1.0.7-r2 \
-    openresolv=3.13.1-r0 \
+    iptables=1.8.9-r2 \
     \
     && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
     && if [ "${BUILD_ARCH}" = "armhf" ]; then ARCH="armv6"; fi \
     && curl -L -s "https://github.com/netbirdio/netbird/releases/download/${BUILD_VERSION}/netbird_${BUILD_VERSION#v}_linux_${ARCH}.tar.gz" \
     | tar xzvpf - -C /usr/bin/ netbird
+#    openresolv=3.13.1-r0 \
+#    \
+#    && ln -sf /sbin/xtables-nft-multi /sbin/ip6tables \
+#    && ln -sf /sbin/xtables-nft-multi /sbin/iptables \
 
 # Copy root filesystem
 COPY rootfs /
