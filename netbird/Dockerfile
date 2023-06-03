@@ -11,7 +11,7 @@ ARG BUILD_VERSION
 # hadolint ignore=DL3003
 RUN \
     apk add --no-cache \
-    nftables=1.0.7-r3 \
+    nftables=1.0.7-r2 \
     openresolv=3.13.1-r0 \
     \
     && ARCH="${BUILD_ARCH}" \
