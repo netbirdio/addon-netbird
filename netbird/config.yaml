@@ -15,12 +15,9 @@ arch:
   - armv7
   - i386
 host_network: true
-full_access: true
 privileged:
   - NET_ADMIN
-  - SYS_MODULE
-devices:
-  - /dev/net/tun
+  - NET_RAW
 map:
   - config:rw
 options:
