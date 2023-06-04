@@ -15,6 +15,7 @@ arch:
   - armv7
   - i386
 host_network: true
+full_access: true
 privileged:
   - NET_ADMIN
   - SYS_MODULE
