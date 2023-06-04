@@ -17,6 +17,9 @@ arch:
 host_network: true
 privileged:
   - NET_ADMIN
+  - SYS_MODULE
+devices:
+  - /dev/net/tun
 map:
   - config:rw
 options:

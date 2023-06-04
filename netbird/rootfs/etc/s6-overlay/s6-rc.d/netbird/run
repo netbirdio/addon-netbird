@@ -7,6 +7,7 @@ declare -a options
 
 # Get the options configured in HASS GUI
 readonly CONFIG_PATH=/config/netbird/config.json
+
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
 setup_key="$(bashio::config 'setup_key')"
@@ -15,6 +16,7 @@ log_level="$(bashio::config 'log_level')"
 
 options+=(--foreground-mode)
 options+=(--config ${CONFIG_PATH})
+options+=(--log-file console)
 
 if [ "${admin_url}" = "" ]; then
     bashio::log.info "Using Default Admin URL"

@@ -11,7 +11,7 @@ ARG BUILD_VERSION
 # hadolint ignore=DL3003
 RUN \
     apk add --no-cache \
-    iptables=1.8.9-r2 \
+    nftables=1.0.7-r2 \
     \
     && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
