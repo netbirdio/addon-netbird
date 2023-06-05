@@ -16,7 +16,6 @@ arch:
   - i386
 host_network: true
 privileged:
-  - SYS_ADMIN
   - NET_ADMIN
   - NET_RAW
   - BPF
