@@ -18,6 +18,7 @@ host_network: true
 privileged:
   - NET_ADMIN
   - NET_RAW
+  - BPF
 map:
   - config:rw
 options:
