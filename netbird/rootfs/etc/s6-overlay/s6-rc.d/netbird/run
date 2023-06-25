@@ -59,9 +59,9 @@ else
 fi
 
 # Load custom environment variables
-for var in $(hass.config.get 'env_vars|keys[]'); do
-    name=$(hass.config.get "env_vars[${var}].name")
-    value=$(hass.config.get "env_vars[${var}].value")
+for var in $(bashio::config 'env_vars|keys'); do
+    name=$(bashio::config "env_vars[${var}].name")
+    value=$(bashio::config "env_vars[${var}].value")
     bashio::log.info "Setting ${name}"
     export "${name}=${value}"
 done
