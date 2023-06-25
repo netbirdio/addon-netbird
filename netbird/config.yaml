@@ -33,10 +33,7 @@ schema:
   management_url: str
   setup_key: str
   hostname: str
-  env_vars: [
-    {
-      name: "match(^NB_([A-Z0-9_])+$)",
+  env_vars:
+    - name: "match(^NB_([A-Z0-9_])+$)",
       value: str
-    }
-  ]
   log_level: list(trace|debug|info|notice|warning|error|fatal)?
