@@ -20,10 +20,6 @@ RUN \
     && curl -L -s "https://github.com/netbirdio/netbird/releases/download/${BUILD_VERSION}/netbird_${BUILD_VERSION#v}_linux_${ARCH}.tar.gz" \
     | tar xzvpf - -C /usr/bin/ netbird
 
-RUN echo '#  systemd-resolved' > /etc/resolv.conf.new \
-    && cat /etc/resolv.conf >> /etc/resolv.conf.new \
-    && mv /etc/resolv.conf.new /etc/resolv.conf
-
 # Copy root filesystem
 COPY rootfs /
 
