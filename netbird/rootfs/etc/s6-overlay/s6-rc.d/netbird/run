@@ -6,7 +6,7 @@
 declare -a options
 declare name
 declare value
-
+cat /etc/resolv.conf
 # Get the options configured in HASS GUI
 readonly CONFIG_PATH=/config/netbird/config.json
 
@@ -65,7 +65,7 @@ for var in $(bashio::config 'env_vars|keys'); do
     bashio::log.info "Setting ${name} to ${value}"
     export "${name}=${value}"
 done
-cat /etc/resolv.conf
+
 bashio::log.info "Starting NetBird Client..."
 bashio::log.info "netbird up ${options[@]}"
 netbird up "${options[@]}"
