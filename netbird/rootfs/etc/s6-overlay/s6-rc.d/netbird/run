@@ -1,4 +1,5 @@
 #!/command/with-contenv bashio
+# shellcheck shell=bash
 # ==============================================================================
 # Home Assistant Community Add-on: NetBird Client
 # Runs NetBird Client
@@ -17,7 +18,7 @@ hostname="$(bashio::config 'hostname')"
 log_level="$(bashio::config 'log_level')"
 
 options+=(--foreground-mode)
-options+=(--config ${CONFIG_PATH})
+options+=(--config "${CONFIG_PATH}")
 options+=(--log-file console)
 
 if [ "${admin_url}" = "" ]; then
@@ -69,7 +70,7 @@ done
 CONTENT=$(cat /etc/resolv.conf)
 echo '# systemd-resolved' > /etc/resolv.conf
 echo "$CONTENT" >> /etc/resolv.conf
-cat /etc/resolv.conf
+
 bashio::log.info "Starting NetBird Client..."
-bashio::log.info "netbird up ${options[@]}"
+bashio::log.info "netbird up " "${options[@]}"
 netbird up "${options[@]}"
