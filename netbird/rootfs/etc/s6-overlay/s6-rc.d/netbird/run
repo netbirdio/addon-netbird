@@ -4,6 +4,8 @@
 # Runs NetBird Client
 # ==============================================================================
 declare -a options
+declare name
+declare value
 
 # Get the options configured in HASS GUI
 readonly CONFIG_PATH=/config/netbird/config.json
@@ -55,6 +57,14 @@ else
     bashio::log.info "Using ${log_level} as logging level"
     options+=(--log-level "${log_level}")
 fi
+
+# Load custom environment variables
+for var in $(hass.config.get 'env_vars|keys[]'); do
+    name=$(hass.config.get "env_vars[${var}].name")
+    value=$(hass.config.get "env_vars[${var}].value")
+    bashio::log.info "Setting ${name}"
+    export "${name}=${value}"
+done
 
 bashio::log.info "Starting NetBird Client..."
 bashio::log.info "netbird up ${options[@]}"

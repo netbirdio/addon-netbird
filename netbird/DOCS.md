@@ -73,6 +73,14 @@ Hostname in the NetBird network (used to during registration)
 
 This hostname will be used in the Peers to identify your machine.
 
+### Option: `env_vars`
+
+Extra environment variables
+
+Extra environment variables to pass to the NetBird client
+This is a list of environment variables that will be passed to the NetBird client.
+You can use this to configure the client further.
+
 ## Changelog & Releases
 
 This repository keeps a change log using [GitHub's releases][releases]

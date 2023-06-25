@@ -29,3 +29,9 @@ configuration:
     description: >-
       Hostname of the client (default "netbird-client")
       This is the name of the client that will be displayed in the NetBird dashboard.
+  env_vars:
+    name: Extra environment variables
+    description: >-
+      Extra environment variables to pass to the NetBird client
+      This is a list of environment variables that will be passed to the NetBird client.
+      You can use this to configure the client further.

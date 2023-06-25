@@ -15,6 +15,7 @@ arch:
   - armv7
   - i386
 host_network: true
+host_dbus: true
 privileged:
   - NET_ADMIN
   - NET_RAW
@@ -26,9 +27,16 @@ options:
   management_url: ""
   setup_key: ""
   hostname: ""
+  env_vars: []
 schema:
   admin_url: str
   management_url: str
   setup_key: str
   hostname: str
+  env_vars: [
+    {
+      name: "match(^NB_([A-Z0-9_])+$)",
+      value: str
+    }
+  ]
   log_level: list(trace|debug|info|notice|warning|error|fatal)?
