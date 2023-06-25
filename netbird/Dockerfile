@@ -8,6 +8,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Setup base
 ARG BUILD_ARCH=amd64
 ARG BUILD_VERSION
+
 # hadolint ignore=DL3003
 RUN \
     apk add --no-cache \
@@ -18,10 +19,9 @@ RUN \
     && if [ "${BUILD_ARCH}" = "armhf" ]; then ARCH="armv6"; fi \
     && curl -L -s "https://github.com/netbirdio/netbird/releases/download/${BUILD_VERSION}/netbird_${BUILD_VERSION#v}_linux_${ARCH}.tar.gz" \
     | tar xzvpf - -C /usr/bin/ netbird
-#    openresolv=3.13.1-r0 \
-#    \
-#    && ln -sf /sbin/xtables-nft-multi /sbin/ip6tables \
-#    && ln -sf /sbin/xtables-nft-multi /sbin/iptables \
+
+RUN echo '#  systemd-resolved' > /etc/resolv.conf \
+    && echo nameserver 8.8.8.8 >> /etc/resolv.conf
 
 # Copy root filesystem
 COPY rootfs /
