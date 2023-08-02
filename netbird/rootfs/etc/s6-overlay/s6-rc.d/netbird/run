@@ -67,6 +67,8 @@ for var in $(bashio::config 'env_vars|keys'); do
     export "${name}=${value}"
 done
 
+# dirty hack to get dns working
+# with this netbird can regonize the host running systemd-resolved
 CONTENT=$(cat /etc/resolv.conf)
 echo '# systemd-resolved' > /etc/resolv.conf
 echo "$CONTENT" >> /etc/resolv.conf
