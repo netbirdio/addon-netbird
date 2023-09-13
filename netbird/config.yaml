@@ -17,6 +17,8 @@ arch:
 host_network: true
 host_dbus: true
 privileged:
+  - SYS_ADMIN
+  - SYS_RESOURCE
   - NET_ADMIN
   - NET_RAW
   - BPF
