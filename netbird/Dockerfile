@@ -13,7 +13,6 @@ ARG BUILD_VERSION
 RUN \
     apk add --no-cache \
     nftables=1.0.7-r2 \
-    iptables=1.8.9-r2 \
     \
     && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
