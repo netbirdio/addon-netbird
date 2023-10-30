@@ -1,7 +1,6 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:14.3.1
-ARG BUILD_VERSION=v0.24.2
 
-FROM netbirdio/netbird:${BUILD_VERSION#v} as netbird-container
+FROM netbirdio/netbird:v0.24.2 as netbird-container
 
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
@@ -19,6 +18,7 @@ COPY rootfs /
 COPY --from=netbird-container /go/bin/netbird /usr/bin/netbird
 
 # Build arguments
+ARG BUILD_VERSION
 ARG BUILD_ARCH
 ARG BUILD_DATE
 ARG BUILD_DESCRIPTION

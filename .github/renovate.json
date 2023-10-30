@@ -35,6 +35,16 @@
     },
     {
       "fileMatch": [
+        "/Dockerfile$"
+      ],
+      "matchStrings": [
+        "netbirdio/netbird:[\"']?(?<currentValue>.+?)[\"']?\\s+"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "netbirdio/netbird"
+    },
+    {
+      "fileMatch": [
         "/config.yaml$"
       ],
       "matchStrings": [
