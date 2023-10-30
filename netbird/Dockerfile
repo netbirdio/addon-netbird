@@ -1,25 +1,25 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:14.3.1
+ARG BUILD_VERSION=v0.24.2
+
 FROM netbirdio/netbird:${BUILD_VERSION#v} as netbird-container
+
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Setup base
-ARG BUILD_ARCH=amd64
-ARG BUILD_VERSION
-
 # hadolint ignore=DL3003
 RUN \
     apk add --no-cache \
-    nftables=1.0.7-r2 \
+    nftables=1.0.7-r2
 
 # Copy root filesystem
 COPY rootfs /
 COPY --from=netbird-container /go/bin/netbird /usr/bin/netbird
 
 # Build arguments
+ARG BUILD_ARCH
 ARG BUILD_DATE
 ARG BUILD_DESCRIPTION
 ARG BUILD_NAME
