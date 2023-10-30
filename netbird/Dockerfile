@@ -1,4 +1,5 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:14.3.1
+FROM netbirdio/netbird:${BUILD_VERSION#v} as netbird-container
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -13,15 +14,10 @@ ARG BUILD_VERSION
 RUN \
     apk add --no-cache \
     nftables=1.0.7-r2 \
-    \
-    && ARCH="${BUILD_ARCH}" \
-    && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
-    && if [ "${BUILD_ARCH}" = "armhf" ]; then ARCH="armv6"; fi \
-    && curl -L -s "https://github.com/netbirdio/netbird/releases/download/${BUILD_VERSION}/netbird_${BUILD_VERSION#v}_linux_${ARCH}.tar.gz" \
-    | tar xzvpf - -C /usr/bin/ netbird
 
 # Copy root filesystem
 COPY rootfs /
+COPY --from=netbird-container /go/bin/netbird /usr/bin/netbird
 
 # Build arguments
 ARG BUILD_DATE
