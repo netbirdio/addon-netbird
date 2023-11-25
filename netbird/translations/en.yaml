@@ -14,7 +14,7 @@ configuration:
   management_url:
     name: Management URL
     description: >-
-      Management Service URL [http|https]://[host]:[port] (default "https://api.wiretrustee.com:33073")
+      Management Service URL [http|https]://[host]:[port] (default "https://api.netbird.io:443")
 
       The client will use this URL to communicate with your NetBird instance api.
   setup_key:

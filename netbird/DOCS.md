@@ -11,7 +11,7 @@ NetBird uses NAT traversal techniques to automatically create an overlay peer-to
 The installation of this add-on is pretty straightforward and not different in
 comparison to installing any other Home Assistant add-on.
 
-1. Add my Hass.io add-ons repository (**<https://github.com/lfarkas/addon-netbird>**) to your Hass.io instance.
+1. Add my Hass.io add-ons repository (**<https://github.com/netbirdio/addon-netbird>**) to your Hass.io instance.
 1. Click the Home Assistant My button below to open the add-on on your Home
    Assistant instance.
 
@@ -152,3 +152,5 @@ SOFTWARE.
 [reddit]: https://reddit.com/r/homeassistant
 [releases]: https://github.com/hassio-addons/addon-netbird/releases
 [semver]: http://semver.org/spec/v2.0.0.html
+[netbird]: https://github.com/netbirdio/netbird
+[lfarkas]: https://github.com/lfarkas
