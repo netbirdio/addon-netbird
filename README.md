@@ -22,6 +22,11 @@ NetBird can connect machines running anywhere in just a few clicks.
 
 It requires near zero configuration effort leaving behind the hassle of opening ports, complex firewall rules, vpn gateways, and so forth.
 
+
+## Installation
+ [![Add to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fnetbirdio%2Faddon-netbird)
+After adding the repository, install the add-on "NetBird Client"
+
 [:books: Read the full add-on documentation][docs]
 
 ## Support
@@ -75,13 +80,13 @@ SOFTWARE.
 [armhf-shield]: https://img.shields.io/badge/armhf-yes-green.svg
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-green.svg
 [commits-shield]: https://img.shields.io/github/commit-activity/y/lfarkas/addon-netbird.svg
-[commits]: https://github.com/lfarkas/addon-netbird/commits/main
+[commits]: https://github.com/netbirdio/addon-netbird/commits/main
 [discord-ha]: https://discord.gg/c5DvZ4e
 [discord]: https://discord.me/hassioaddons
-[docs]: https://github.com/lfarkas/addon-netbird/blob/main/netbird/DOCS.md
+[docs]: https://github.com/netbirdio/addon-netbird/blob/main/netbird/DOCS.md
 [forum]: https://community.home-assistant.io/t/repository-community-hass-io-add-ons/24705
 [i386-shield]: https://img.shields.io/badge/i386-yes-green.svg
-[issue]: https://github.com/lfarkas/addon-netbird/issues
+[issue]: https://github.com/netbirdio/addon-netbird/issues
 [license-shield]: https://img.shields.io/github/license/lfarkas/addon-netbird.svg
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2023.svg
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-experimental-yellow.svg
