@@ -12,20 +12,23 @@
 ![Project Maintenance][maintenance-shield]
 [![GitHub Activity][commits-shield]][commits]
 
-NetBird Client add-on by Community Home Assistant add-ons.
-
 ## About
 
-NetBird is a simple and fast alternative to corporate VPNs built on top of WireGuard® making it easy to create secure private networks for your organization or home.
+[NetBird](https://netbird.io/)® is a simple and fast alternative to corporate VPNs built on top of [WireGuard](https://www.wireguard.com/)® making it easy to create secure private networks for your organization or home.
 
-NetBird can connect machines running anywhere in just a few clicks.
+[NetBird](https://netbird.io/)® can connect machines running anywhere in just a few clicks.
 
 It requires near zero configuration effort leaving behind the hassle of opening ports, complex firewall rules, vpn gateways, and so forth.
 
 
 ## Installation
- [![Add to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fnetbirdio%2Faddon-netbird)
-After adding the repository, install the add-on "NetBird Client"
+First add the repository:
+
+[![Add to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fnetbirdio%2Faddon-netbird)
+
+Then install the add-on "NetBird Client":
+
+[![Open your Home Assistant instance and show the dashboard of a Supervisor add-on.](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=7edd9457_netbird&repository_url=https%3A%2F%2Fgithub.com%2Fnetbirdio%2Faddon-netbird)
 
 [:books: Read the full add-on documentation][docs]
 
