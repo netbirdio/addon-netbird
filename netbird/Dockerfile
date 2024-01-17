@@ -11,7 +11,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # hadolint ignore=DL3003
 RUN \
     apk add --no-cache \
-    nftables=1.0.7-r2
+    nftables=1.0.9-r1
 
 # Copy root filesystem
 COPY rootfs /
