@@ -38,16 +38,6 @@
         "/Dockerfile$"
       ],
       "matchStrings": [
-        "ARG BUILD_VERSION=[\"']?(?<currentValue>.+?)[\"']?\\s+"
-      ],
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "netbirdio/netbird"
-    },
-    {
-      "fileMatch": [
-        "/Dockerfile$"
-      ],
-      "matchStrings": [
         "netbirdio/netbird:[\"']?(?<currentValue>.+?)[\"']?\\s+"
       ],
       "datasourceTemplate": "github-releases",
