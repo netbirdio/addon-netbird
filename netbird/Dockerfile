@@ -15,7 +15,7 @@ RUN \
 
 # Copy root filesystem
 COPY rootfs /
-COPY --from=netbird-container /go/bin/netbird /usr/bin/netbird
+COPY --from=netbird-container /usr/local/bin/netbird /usr/local/bin/netbird
 
 # Build arguments
 ARG BUILD_VERSION
