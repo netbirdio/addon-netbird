@@ -1,6 +1,6 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:15.0.8
 
-FROM netbirdio/netbird:0.27.5 as netbird-container
+FROM netbirdio/netbird:0.27.6 as netbird-container
 
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
