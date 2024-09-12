@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/base:16.3.0
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:16.3.1
 
 FROM netbirdio/netbird:0.29.1 as netbird-container
 
