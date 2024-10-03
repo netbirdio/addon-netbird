@@ -23,7 +23,7 @@ privileged:
   - NET_RAW
   - BPF
 map:
-  - config:rw
+  - addon_config:rw
 options:
   admin_url: ""
   management_url: ""

@@ -26,7 +26,7 @@ comparison to installing any other Home Assistant add-on.
 
 ## Configuration
 
-You'll see the config file at `/config/netbird/config.json` after first boot.
+You'll see the config file at `/addon_config/*_netbird/config.json` after first boot.
 
 ### Option: `log_level`
 
