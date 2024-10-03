@@ -14,7 +14,7 @@ arch:
   - armhf
   - armv7
   - i386
-host_network: false
+host_network: true
 host_dbus: true
 privileged:
   - SYS_ADMIN
