@@ -9,7 +9,7 @@ declare name
 declare value
 
 # Get the options configured in HASS GUI
-readonly CONFIG_PATH=config.json
+readonly CONFIG_PATH=/config/config.json
 
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
