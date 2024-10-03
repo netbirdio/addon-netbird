@@ -8,8 +8,7 @@ declare -a options
 declare name
 declare value
 
-touch config/111
-touch /config/222
+
 # Get the options configured in HASS GUI
 readonly CONFIG_PATH=config/config.json
 
