@@ -10,7 +10,10 @@ declare value
 
 
 # Get the options configured in HASS GUI
+readonly CONFIG_OLD_PATH=/homeassistant/netbird/config.json
 readonly CONFIG_PATH=/config/config.json
+
+[ -f "${CONFIG_OLD_PATH}" ] && mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}"
 
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"

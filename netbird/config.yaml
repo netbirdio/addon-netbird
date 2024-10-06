@@ -1,6 +1,6 @@
 ---
 name: NetBird
-version: v0.30.0
+version: v0.30.0.1
 slug: netbird
 description: Connect your devices into a single secure private WireGuard®-based mesh network.
 url: https://github.com/netbirdio/addon-netbird
@@ -23,6 +23,7 @@ privileged:
   - NET_RAW
   - BPF
 map:
+  - homeassistant_config
   - addon_config:rw
 options:
   admin_url: ""
