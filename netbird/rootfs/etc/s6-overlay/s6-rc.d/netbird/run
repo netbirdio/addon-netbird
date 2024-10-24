@@ -19,6 +19,8 @@ admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
 setup_key="$(bashio::config 'setup_key')"
 hostname="$(bashio::config 'hostname')"
+rosenpass="$(bashio::config 'rosenpass')"
+rosenpass_permissive="$(bashio::config 'rosenpass_permissive')"
 log_level="$(bashio::config 'log_level')"
 
 options+=(--foreground-mode)
@@ -53,6 +55,18 @@ if [ "${hostname}" = "" ]; then
 else
     bashio::log.info "Using ${hostname} as hostname"
     options+=(--hostname "${hostname}")
+fi
+
+if ! ${rosenpass}; then
+    bashio::log.info "Rosenpass disabled"
+    options+=(--enable-rosenpass=false)
+else
+    bashio::log.info "Rosenpass enabled"
+    options+=(--enable-rosenpass)
+    if ${rosenpass_permissive}; then
+        bashio::log.info "Rosenpass permissive mode enabled"
+        options+=(--rosenpass-permissive)
+    fi
 fi
 
 if [ "${log_level}" = "" ] || [ "${log_level}" = "null" ]; then

@@ -20,6 +20,8 @@ comparison to installing any other Home Assistant add-on.
 1. Install the "NetBird" add-on.
 1. If you are using the central NetBird instance you can either use the URL generated in the log or you can use a `setup_key`. If hosting your own then you'll want to set `admin_url` & `management_url` and again only need to set up the `setup_key` if you don't want to login via the log generated URL.
 1. If you would like to change the auto generated hostname (which is the docker container id in case of hassio) set the `hostname`.
+1. If you would like to enable Rosenpass set the `rosenpass` to `true`.
+1. If you would like to enable Rosenpass in permissive way set the `rosenpass_permissive` to true.
 1. Start the "NetBird" add-on.
 1. Feels free to check the logs for `NetBird` to make sure its booted correctly.
 1. This client will show up in your NetBird dashboard.
@@ -72,6 +74,20 @@ option empty if you would prefer to login via a URL generated in the log with th
 Hostname in the NetBird network (used to during registration)
 
 This hostname will be used in the Peers to identify your machine.
+
+### Option: `rosenpass`
+
+Rosenpass can be enabled by setting a flag on client start-up.
+
+Rosenpass is a post-quantum secure key-exchange protocol that enhances WireGuard
+VPNs against quantum computer attacks. It employs advanced cryptographic methods
+Classic McEliece and Kyber.
+
+### Option: `rosenpass_permissive`
+
+Rosenpass can be enabled in permissive way.
+
+Enabling Rosenpass on one peer assumes that all peers have Rosenpass enabled. If one of the peers does not enable this feature or run an older version that lacks Rosenpass, the connection won't work. To allow non-Rosenpass enabled peers to connect to a Rosenpass peer, the permissive mode can be activated. In this case, the NetBird client will default to a standard WireGuard connection without pre-shared keys for those connections that don't support Rosenpass. It will continue negotiating PSKs with Rosenpass for the rest, ensuring enhanced security wherever possible.
 
 ### Option: `env_vars`
 

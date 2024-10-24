@@ -29,6 +29,18 @@ configuration:
     description: >-
       Hostname of the client (default "netbird-client")
       This is the name of the client that will be displayed in the NetBird dashboard.
+  rosenpass:
+    name: Rosenpass
+    description: >-
+      Rosenpass can be enabled by setting a flag on client start-up.
+      Rosenpass is a post-quantum secure key-exchange protocol that enhances WireGuard
+      VPNs against quantum computer attacks. It employs advanced cryptographic methods
+      Classic McEliece and Kyber.
+  rosenpass_permissive:
+    name: Rosenpass Permissive
+    description: >-
+      Rosenpass permissive mode can be enabled by setting a flag on client start-up.
+      This mode allows the client to connect to a non-Rosenpass server.
   env_vars:
     name: Extra environment variables
     description: >-

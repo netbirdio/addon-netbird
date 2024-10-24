@@ -30,12 +30,16 @@ options:
   management_url: ""
   setup_key: ""
   hostname: ""
+  rosenpass: false
+  rosenpass_permissive: false
   env_vars: []
 schema:
   admin_url: str
   management_url: str
   setup_key: str
   hostname: str
+  rosenpass: bool
+  rosenpass_permissive: bool
   env_vars:
     - name: match(^NB_([A-Z0-9_])+$)
       value: str
