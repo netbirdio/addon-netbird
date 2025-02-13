@@ -8,8 +8,9 @@
   ],
   "commitMessagePrefix": "⬆️",
   "commitMessageTopic": "{{depName}}",
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "fileMatch": [
         "/Dockerfile$",
         "/build.yaml$"
@@ -22,6 +23,7 @@
       "datasourceTemplate": "docker"
     },
     {
+      "customType": "regex",
       "fileMatch": [
         "/Dockerfile$"
       ],
@@ -34,6 +36,7 @@
       "depNameTemplate": "alpine_3_19/{{package}}"
     },
     {
+      "customType": "regex",
       "fileMatch": [
         "/Dockerfile$"
       ],
@@ -44,6 +47,7 @@
       "depNameTemplate": "netbirdio/netbird"
     },
     {
+      "customType": "regex",
       "fileMatch": [
         "/config.yaml$"
       ],
