@@ -5,7 +5,7 @@ FROM netbirdio/netbird:0.49.0 as netbird-container
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
-RUN apk add --no-cache nftables=1.1.1-r0
+RUN apk add --no-cache nftables=1.1.3-r0
 
 # Copy root filesystem
 COPY rootfs /
