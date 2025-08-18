@@ -11,9 +11,11 @@ declare value
 
 # Get the options configured in HASS GUI
 readonly CONFIG_OLD_PATH=/homeassistant/netbird/config.json
-readonly CONFIG_PATH=/config/config.json
+readonly CONFIG_PATH=/var/lib/netbird/config.json
+readonly CONFIG_PROFILE_PATH=/var/lib/netbird/default.json
 
 [ -f "${CONFIG_OLD_PATH}" ] && mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}"
+[ -f "${CONFIG_PATH}" ] && mv "${CONFIG_PATH}" "${CONFIG_PROFILE_PATH}"
 
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
@@ -24,7 +26,7 @@ rosenpass_permissive="$(bashio::config 'rosenpass_permissive')"
 log_level="$(bashio::config 'log_level')"
 
 options+=(--foreground-mode)
-options+=(--config "${CONFIG_PATH}")
+# options+=(--config "${CONFIG_PATH}")
 options+=(--log-file console)
 
 if [ "${admin_url}" = "" ]; then

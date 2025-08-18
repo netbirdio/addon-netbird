@@ -23,8 +23,11 @@ privileged:
   - NET_RAW
   - BPF
 map:
-  - homeassistant_config:rw
-  - addon_config:rw
+  - type: homeassistant_config
+    read_only: false
+  - type: addon_config
+    read_only: false
+    path: /var/lib/netbird
 options:
   admin_url: ""
   management_url: ""
