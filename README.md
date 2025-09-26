@@ -18,7 +18,7 @@
 
 [NetBird](https://netbird.io/)® can connect machines running anywhere in just a few clicks.
 
-It requires near zero configuration effort leaving behind the hassle of opening ports, complex firewall rules, vpn gateways, and so forth.
+It requires near-zero configuration effort, leaving behind the hassle of opening ports, complex firewall rules, vpn gateways, and so forth.
 
 
 ## Installation
