@@ -1,0 +1,69 @@
+#include <tunables/global>
+
+profile netbird flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+
+  # Capabilities required for VPN functionality
+  capability net_admin,        # Required for network interface management
+  capability net_raw,          # Required for raw socket access (WireGuard)
+  capability sys_admin,        # Required for network namespace operations
+  capability sys_resource,     # Required for resource limit modifications
+  capability bpf,              # Required for eBPF functionality
+
+  # S6-Overlay
+  /init ix,
+  /bin/** ix,
+  /usr/bin/** ix,
+  /run/{s6,s6-rc*,service}/** ix,
+
+  # Bashio
+  /usr/lib/bashio/** ix,
+  /tmp/** rwk,
+
+  # Access to options.json and other service settings
+  /data/** rw,
+
+  # NetBird binary and configuration
+  /usr/local/bin/netbird ix,
+  /var/lib/netbird/** rw,
+  /homeassistant/netbird/** rw,
+
+  # Network access
+  network inet stream,
+  network inet dgram,
+  network inet6 stream,
+  network inet6 dgram,
+  network netlink raw,
+
+  # DNS and network configuration
+  /etc/resolv.conf rw,
+  /etc/nsswitch.conf r,
+  /etc/hosts r,
+  /etc/services r,
+  /etc/protocols r,
+
+  # WireGuard kernel module and device access
+  /sys/module/wireguard/** r,
+  /dev/net/tun rw,
+  /proc/sys/net/** rw,
+
+  # NetBird requires access to network interfaces
+  /sys/class/net/** r,
+  /sys/devices/virtual/net/** r,
+
+  # eBPF requirements
+  /sys/fs/bpf/** rw,
+  /sys/kernel/btf/vmlinux r,
+
+  # nftables for routing
+  /usr/sbin/nft ix,
+  /etc/nftables.conf r,
+
+  # Logging
+  /dev/console rw,
+  /dev/pts/* rw,
+
+  # Suppress harmless denials
+  deny /proc/sys/kernel/osrelease r,
+  deny /sys/kernel/mm/transparent_hugepage/hpage_pmd_size r,
+}

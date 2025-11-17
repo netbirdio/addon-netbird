@@ -28,6 +28,7 @@ map:
   - type: addon_config
     read_only: false
     path: /var/lib/netbird
+watchdog: "tcp://localhost:53"
 options:
   admin_url: ""
   management_url: ""
