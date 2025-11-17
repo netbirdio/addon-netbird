@@ -22,7 +22,7 @@ fi
 
 if [ -f "${CONFIG_PATH}" ] && [ ! -f "${CONFIG_PROFILE_PATH}" ]; then
     bashio::log.info "Setting up NetBird profile configuration..."
-    mv "${CONFIG_PATH}" "${CONFIG_PROFILE_PATH}" && bashio::log.info "Migration step 2 complete"
+    mv "${CONFIG_PATH}" "${CONFIG_PROFILE_PATH}" && bashio::log.info "Migration step 2 complete" || bashio::log.error "Migration step 2 failed: could not move ${CONFIG_PATH} to ${CONFIG_PROFILE_PATH}"
 fi
 
 admin_url="$(bashio::config 'admin_url')"
