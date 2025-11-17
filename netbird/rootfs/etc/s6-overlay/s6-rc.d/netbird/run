@@ -17,7 +17,7 @@ readonly CONFIG_PROFILE_PATH=/var/lib/netbird/default.json
 # Migrate old configuration files to new location (one-time migration)
 if [ -f "${CONFIG_OLD_PATH}" ] && [ ! -f "${CONFIG_PROFILE_PATH}" ]; then
     bashio::log.info "Migrating configuration from old location..."
-    mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}" && bashio::log.info "Migration step 1 complete"
+    mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}" && bashio::log.info "Migration step 1 complete" || bashio::log.error "Migration step 1 failed: could not move ${CONFIG_OLD_PATH} to ${CONFIG_PATH}"
 fi
 
 if [ -f "${CONFIG_PATH}" ] && [ ! -f "${CONFIG_PROFILE_PATH}" ]; then
