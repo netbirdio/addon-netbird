@@ -11,9 +11,19 @@ declare value
 
 # Get the options configured in HASS GUI
 readonly CONFIG_OLD_PATH=/homeassistant/netbird/config.json
-readonly CONFIG_PATH=/config/config.json
+readonly CONFIG_PATH=/var/lib/netbird/config.json
+readonly CONFIG_PROFILE_PATH=/var/lib/netbird/default.json
 
-[ -f "${CONFIG_OLD_PATH}" ] && mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}"
+# Migrate old configuration files to new location (one-time migration)
+if [ -f "${CONFIG_OLD_PATH}" ] && [ ! -f "${CONFIG_PROFILE_PATH}" ]; then
+    bashio::log.info "Migrating configuration from old location..."
+    mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}" && bashio::log.info "Migration step 1 complete" || bashio::log.error "Migration step 1 failed: could not move ${CONFIG_OLD_PATH} to ${CONFIG_PATH}"
+fi
+
+if [ -f "${CONFIG_PATH}" ] && [ ! -f "${CONFIG_PROFILE_PATH}" ]; then
+    bashio::log.info "Setting up NetBird profile configuration..."
+    mv "${CONFIG_PATH}" "${CONFIG_PROFILE_PATH}" && bashio::log.info "Migration step 2 complete" || bashio::log.error "Migration step 2 failed: could not move ${CONFIG_PATH} to ${CONFIG_PROFILE_PATH}"
+fi
 
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
@@ -24,7 +34,6 @@ rosenpass_permissive="$(bashio::config 'rosenpass_permissive')"
 log_level="$(bashio::config 'log_level')"
 
 options+=(--foreground-mode)
-options+=(--config "${CONFIG_PATH}")
 options+=(--log-file console)
 
 if [ "${admin_url}" = "" ]; then
@@ -45,7 +54,7 @@ if [ "${setup_key}" = "" ]; then
     bashio::log.info "No Setup Key Set"
     bashio::log.info "This client will only show up in dashboards it's already registered with."
 else
-    bashio::log.info "Using ${setup_key} as Setup Key"
+    bashio::log.info "Setup Key configured (hidden for security)"
     options+=(--setup-key "${setup_key}")
 fi
 
@@ -85,11 +94,19 @@ for var in $(bashio::config 'env_vars|keys'); do
     export "${name}=${value}"
 done
 
-# dirty hack to get dns working
-# with this netbird can regonize the host running systemd-resolved
+# Workaround for DNS resolution with systemd-resolved
+# NetBird checks for systemd-resolved by looking for a specific comment in /etc/resolv.conf
+# This ensures NetBird can properly detect and configure DNS settings on the host
+# See: https://github.com/netbirdio/netbird/issues/dns-detection
 CONTENT=$(cat /etc/resolv.conf)
 echo '# systemd-resolved' > /etc/resolv.conf
 echo "$CONTENT" >> /etc/resolv.conf
+
+# Verify netbird binary exists
+if ! command -v netbird &> /dev/null; then
+    bashio::log.fatal "NetBird binary not found!"
+    exit 1
+fi
 
 bashio::log.info "Starting NetBird Client..."
 bashio::log.info "netbird up " "${options[@]}"

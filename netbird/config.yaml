@@ -4,16 +4,12 @@ version: v0.59.13
 slug: netbird
 description: Connect your devices into a single secure private WireGuard®-based mesh network.
 url: https://github.com/netbirdio/addon-netbird
-codenotary: lfarkas@lfarkas.org
 startup: services
 panel_icon: mdi:vpn
 init: false
 arch:
   - aarch64
   - amd64
-  - armhf
-  - armv7
-  - i386
 host_network: true
 host_dbus: true
 privileged:
@@ -23,8 +19,11 @@ privileged:
   - NET_RAW
   - BPF
 map:
-  - homeassistant_config:rw
-  - addon_config:rw
+  - type: homeassistant_config
+    read_only: false
+  - type: addon_config
+    read_only: false
+    path: /var/lib/netbird
 options:
   admin_url: ""
   management_url: ""
