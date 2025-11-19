@@ -11,19 +11,9 @@ declare value
 
 # Get the options configured in HASS GUI
 readonly CONFIG_OLD_PATH=/homeassistant/netbird/config.json
-readonly CONFIG_PATH=/var/lib/netbird/config.json
-readonly CONFIG_PROFILE_PATH=/var/lib/netbird/default.json
+readonly CONFIG_PATH=/config/config.json
 
-# Migrate old configuration files to new location (one-time migration)
-if [ -f "${CONFIG_OLD_PATH}" ] && [ ! -f "${CONFIG_PROFILE_PATH}" ]; then
-    bashio::log.info "Migrating configuration from old location..."
-    mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}" && bashio::log.info "Migration step 1 complete" || bashio::log.error "Migration step 1 failed: could not move ${CONFIG_OLD_PATH} to ${CONFIG_PATH}"
-fi
-
-if [ -f "${CONFIG_PATH}" ] && [ ! -f "${CONFIG_PROFILE_PATH}" ]; then
-    bashio::log.info "Setting up NetBird profile configuration..."
-    mv "${CONFIG_PATH}" "${CONFIG_PROFILE_PATH}" && bashio::log.info "Migration step 2 complete" || bashio::log.error "Migration step 2 failed: could not move ${CONFIG_PATH} to ${CONFIG_PROFILE_PATH}"
-fi
+[ -f "${CONFIG_OLD_PATH}" ] && mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}"
 
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
@@ -34,6 +24,7 @@ rosenpass_permissive="$(bashio::config 'rosenpass_permissive')"
 log_level="$(bashio::config 'log_level')"
 
 options+=(--foreground-mode)
+options+=(--config "${CONFIG_PATH}")
 options+=(--log-file console)
 
 if [ "${admin_url}" = "" ]; then
