@@ -45,7 +45,7 @@ if [ "${setup_key}" = "" ]; then
     bashio::log.info "No Setup Key Set"
     bashio::log.info "This client will only show up in dashboards it's already registered with."
 else
-    bashio::log.info "Using ${setup_key} as Setup Key"
+    bashio::log.info "Setup Key configured (hidden for security)"
     options+=(--setup-key "${setup_key}")
 fi
 
@@ -85,8 +85,9 @@ for var in $(bashio::config 'env_vars|keys'); do
     export "${name}=${value}"
 done
 
-# dirty hack to get dns working
-# with this netbird can regonize the host running systemd-resolved
+# Workaround for DNS resolution with systemd-resolved
+# NetBird checks for systemd-resolved by looking for a specific comment in /etc/resolv.conf
+# This ensures NetBird can properly detect and configure DNS settings on the host
 CONTENT=$(cat /etc/resolv.conf)
 echo '# systemd-resolved' > /etc/resolv.conf
 echo "$CONTENT" >> /etc/resolv.conf
