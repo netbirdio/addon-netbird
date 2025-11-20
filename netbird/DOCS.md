@@ -58,7 +58,7 @@ You'll find that the log generates a login URL you can use instead of configurin
 
 ### Option: `management_url`
 
-Management Service URL [http|https]://[host]:[port] (default "https://api.netbird.io:443")
+Management Service URL [http|https]://[host]:[port] (default "<https://api.wiretrustee.com:33073>")
 
 The client will use this URL to communicate with your NetBird instance api.
 
@@ -159,8 +159,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 [addon-badge]: https://my.home-assistant.io/badges/supervisor_addon.svg
-[addon]: https://my.home-assistant.io/redirect/supervisor_addon/?addon=netbird&repository_url=https%3A%2F%2Fgithub.com%2Fnetbirdio%2Faddon-netbird
-[contributors]: https://github.com/netbirdio/addon-netbird/graphs/contributors
+[addon]: https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_netbird&repository_url=https%3A%2F%2Fgithub.com%2Fnetbirdio%2Faddon-netbird
+[contributors]: https://github.com/hassio-addons/addon-netbird/graphs/contributors
 [discord-ha]: https://discord.gg/c5DvZ4e
 [discord]: https://discord.me/hassioaddons
 [forum]: https://community.home-assistant.io/t/repository-community-hass-io-add-ons/24705
