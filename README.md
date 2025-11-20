@@ -47,6 +47,7 @@ You have several options to get them answered:
 
 You could also [open an issue here][issue] GitHub.
 
+
 ## Contributing
 
 This is an active open-source project. We are always open to people who want to
