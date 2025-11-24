@@ -81,6 +81,13 @@ fi
 for var in $(bashio::config 'env_vars|keys'); do
     name=$(bashio::config "env_vars[${var}].name")
     value=$(bashio::config "env_vars[${var}].value")
+
+    # Validate that the variable name matches the expected pattern (NB_*)
+    if [[ ! "${name}" =~ ^NB_([A-Z0-9_])+$ ]]; then
+        bashio::log.warning "Skipping invalid environment variable name: ${name} (must match pattern NB_[A-Z0-9_]+)"
+        continue
+    fi
+
     bashio::log.info "Setting ${name} to ${value}"
     export "${name}=${value}"
 done
