@@ -77,6 +77,15 @@
       "automerge": true
     },
     {
+      "groupName": "NetBird",
+      "matchDatasources": [
+        "github-releases"
+      ],
+      "matchDepNames": [
+        "netbirdio/netbird"
+      ]
+    },
+    {
       "matchDatasources": [
         "github-releases"
       ],
