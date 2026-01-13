@@ -86,6 +86,6 @@ SOFTWARE.
 [forum]: https://community.home-assistant.io/t/repository-community-hass-io-add-ons/24705
 [issue]: https://github.com/netbirdio/addon-netbird/issues
 [license-shield]: https://img.shields.io/github/license/lfarkas/addon-netbird.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2025.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-experimental-yellow.svg
 [reddit]: https://reddit.com/r/homeassistant
