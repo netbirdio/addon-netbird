@@ -39,6 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Notes
-- Based on hassio-addons base image 18.2.1
+- Based on hassio-addons base image 19.0.0
 - Supports aarch64 and amd64 architectures only
 - Requires privileged capabilities for VPN functionality
