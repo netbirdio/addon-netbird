@@ -5,10 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v0.59.13] - 2025-11-17
+## [v0.60.2] - 2025-11-17
 
 ### Changed
-- Updated to NetBird v0.59.13
+- Updated to NetBird v0.60.2
 - **BREAKING**: Removed support for armhf, armv7, and i386 architectures
 - Only aarch64 and amd64 architectures are now supported
 
