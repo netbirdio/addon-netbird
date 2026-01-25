@@ -1,0 +1,125 @@
+---
+name: Update Changelog
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'netbird/Dockerfile'
+      - 'netbird/config.yaml'
+
+jobs:
+  update-changelog:
+    name: Update changelog for NetBird releases
+    runs-on: ubuntu-latest
+    # Only run on Renovate PRs for NetBird updates
+    if: |
+      github.actor == 'renovate[bot]' &&
+      contains(github.event.pull_request.title, 'netbirdio/netbird')
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract new version from PR
+        id: version
+        run: |
+          # Extract version from config.yaml
+          VERSION=$(grep -E '^version:' netbird/config.yaml | sed 's/version:\s*//' | tr -d '"' | tr -d "'")
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Detected NetBird version: ${VERSION}"
+
+      - name: Fetch upstream release notes
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # Fetch release notes from upstream repo
+          RELEASE_BODY=$(gh api "repos/netbirdio/netbird/releases/tags/v${VERSION}" --jq '.body // empty' 2>/dev/null || echo "")
+          RELEASE_DATE=$(gh api "repos/netbirdio/netbird/releases/tags/v${VERSION}" --jq '.published_at // empty' 2>/dev/null | cut -d'T' -f1 || echo "")
+
+          if [ -z "$RELEASE_DATE" ]; then
+            RELEASE_DATE=$(date +%Y-%m-%d)
+          fi
+
+          echo "release_date=${RELEASE_DATE}" >> "$GITHUB_OUTPUT"
+
+          # Save release body to file for multiline handling
+          if [ -n "$RELEASE_BODY" ]; then
+            echo "$RELEASE_BODY" > /tmp/release_notes.md
+            echo "has_notes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_notes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update CHANGELOG.md
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          RELEASE_DATE="${{ steps.release.outputs.release_date }}"
+          HAS_NOTES="${{ steps.release.outputs.has_notes }}"
+          CHANGELOG_FILE="netbird/CHANGELOG.md"
+
+          # Check if this version already exists in changelog
+          if grep -q "## \[v${VERSION}\]" "$CHANGELOG_FILE"; then
+            echo "Version v${VERSION} already exists in changelog, skipping..."
+            exit 0
+          fi
+
+          # Create the new changelog entry
+          NEW_ENTRY="## [v${VERSION}] - ${RELEASE_DATE}
+
+          ### Changed
+          - Updated to NetBird v${VERSION}
+          "
+
+          # Add upstream release notes if available
+          if [ "$HAS_NOTES" = "true" ]; then
+            NEW_ENTRY="${NEW_ENTRY}
+          ### Upstream Release Notes
+          "
+            # Process release notes - convert to proper markdown format
+            while IFS= read -r line; do
+              # Skip empty lines at start
+              if [ -z "$line" ] && [ -z "${started:-}" ]; then
+                continue
+              fi
+              started=true
+              NEW_ENTRY="${NEW_ENTRY}${line}
+          "
+            done < /tmp/release_notes.md
+          fi
+
+          # Insert new entry after the header section (after line 6)
+          {
+            head -n 6 "$CHANGELOG_FILE"
+            echo ""
+            echo "$NEW_ENTRY"
+            tail -n +8 "$CHANGELOG_FILE"
+          } > "${CHANGELOG_FILE}.tmp"
+
+          mv "${CHANGELOG_FILE}.tmp" "$CHANGELOG_FILE"
+
+          echo "Updated changelog with v${VERSION} entry"
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet netbird/CHANGELOG.md; then
+            echo "No changelog changes to commit"
+            exit 0
+          fi
+
+          git add netbird/CHANGELOG.md
+          git commit -m "📝 Update CHANGELOG.md for NetBird v${{ steps.version.outputs.version }}"
+          git push

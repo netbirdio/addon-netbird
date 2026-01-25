@@ -83,6 +83,9 @@
       ],
       "matchDepNames": [
         "netbirdio/netbird"
+      ],
+      "addLabels": [
+        "netbird-update"
       ]
     },
     {
