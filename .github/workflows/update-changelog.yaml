@@ -18,7 +18,6 @@ jobs:
       contains(github.event.pull_request.title, 'netbirdio/netbird')
     permissions:
       contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout PR branch
