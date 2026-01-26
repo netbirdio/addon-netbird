@@ -151,9 +151,9 @@ jobs:
 
           if [ -n "$FIRST_VERSION_LINE" ]; then
             # Insert the new entry before the first existing version entry
+            # Note: No extra blank line needed - header section already ends with one
             {
               head -n "$((FIRST_VERSION_LINE - 1))" "$CHANGELOG_FILE"
-              printf '\n'
               printf '%s\n' "$NEW_ENTRY"
               tail -n "+$FIRST_VERSION_LINE" "$CHANGELOG_FILE"
             } > "${CHANGELOG_FILE}.tmp"
@@ -161,7 +161,6 @@ jobs:
             # If no version entries are found, append the new entry to the end
             {
               cat "$CHANGELOG_FILE"
-              printf '\n'
               printf '%s\n' "$NEW_ENTRY"
             } > "${CHANGELOG_FILE}.tmp"
           fi
