@@ -52,7 +52,8 @@ jobs:
           RELEASE_DATE=$(gh api "repos/netbirdio/netbird/releases/tags/v${VERSION}" --jq '.published_at // empty' 2>/dev/null | cut -d'T' -f1 || echo "")
 
           if [ -z "$RELEASE_DATE" ]; then
-            RELEASE_DATE=$(date +%Y-%m-%d)
+            echo "Error: Unable to fetch release date for NetBird v${VERSION}. Failing workflow to avoid using an incorrect date in the changelog."
+            exit 1
           fi
 
           echo "release_date=${RELEASE_DATE}" >> "$GITHUB_OUTPUT"
