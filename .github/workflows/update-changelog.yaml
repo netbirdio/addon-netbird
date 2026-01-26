@@ -15,7 +15,10 @@ jobs:
     # Only run on Renovate PRs for NetBird updates
     if: |
       github.actor == 'renovate[bot]' &&
-      contains(github.event.pull_request.title, 'netbirdio/netbird')
+      (
+        contains(github.event.pull_request.title, 'netbirdio/netbird') ||
+        contains(join(github.event.pull_request.labels.*.name, ','), 'netbird-update')
+      )
     permissions:
       contents: write
 
