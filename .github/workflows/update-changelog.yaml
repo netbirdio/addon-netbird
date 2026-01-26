@@ -97,8 +97,7 @@ jobs:
                 continue
               fi
               started=true
-              NEW_ENTRY="${NEW_ENTRY}${line}
-          "
+              NEW_ENTRY="${NEW_ENTRY}${line}"$'\n'
             done < /tmp/release_notes.md
           fi
 
