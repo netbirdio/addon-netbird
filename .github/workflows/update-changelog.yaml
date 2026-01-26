@@ -31,8 +31,12 @@ jobs:
       - name: Extract new version from PR
         id: version
         run: |
-          # Extract version from config.yaml
-          VERSION=$(grep -E '^version:' netbird/config.yaml | sed 's/version:\s*//' | tr -d '"' | tr -d "'")
+          # Extract version from config.yaml (strip 'v' prefix)
+          VERSION=$(grep -E '^version:' netbird/config.yaml \
+            | sed 's/version:\s*//' \
+            | tr -d '"' \
+            | tr -d "'" \
+            | sed 's/^v//')
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "Detected NetBird version: ${VERSION}"
 
