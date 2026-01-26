@@ -83,8 +83,12 @@ jobs:
 
           # Check if this version already exists in changelog
           if grep -q "## \[v${VERSION}\]" "$CHANGELOG_FILE"; then
-            echo "Version v${VERSION} already exists in changelog, skipping..."
-            exit 0
+            if [ "${FORCE_CHANGELOG_UPDATE:-false}" != "true" ]; then
+              echo "Version v${VERSION} already exists in changelog, skipping update. Set FORCE_CHANGELOG_UPDATE=true to force regenerating this entry."
+              exit 0
+            else
+              echo "Version v${VERSION} already exists in changelog, but FORCE_CHANGELOG_UPDATE=true is set; regenerating changelog entry."
+            fi
           fi
 
           # Create the new changelog entry
