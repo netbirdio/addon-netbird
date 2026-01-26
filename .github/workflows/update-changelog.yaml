@@ -66,6 +66,11 @@ jobs:
 
           # Fetch release notes from upstream repo
           RELEASE_BODY=$(gh api "repos/netbirdio/netbird/releases/tags/v${VERSION}" --jq '.body // empty' 2>/dev/null || echo "")
+
+          # NOTE: We use the upstream release date (published_at), not the integration date.
+          # This makes it easier to track which upstream version corresponds to which release,
+          # and aligns the addon changelog with upstream NetBird release timeline.
+          # If you prefer integration dates, replace this with: RELEASE_DATE=$(date +%Y-%m-%d)
           RELEASE_DATE=$(gh api "repos/netbirdio/netbird/releases/tags/v${VERSION}" --jq '.published_at // empty' 2>/dev/null | cut -d'T' -f1 || echo "")
 
           if [ -z "$RELEASE_DATE" ]; then
