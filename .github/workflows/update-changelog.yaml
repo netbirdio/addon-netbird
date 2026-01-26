@@ -12,7 +12,13 @@ jobs:
   update-changelog:
     name: Update changelog for NetBird releases
     runs-on: ubuntu-latest
-    # Only run on Renovate PRs for NetBird updates
+    # SECURITY: This workflow has write permissions to push commits.
+    # Multiple safeguards prevent misuse:
+    #   1. Actor must be 'renovate[bot]' (GitHub-verified bot identity)
+    #   2. PR title must contain 'netbirdio/netbird' OR have 'netbird-update' label
+    #   3. PR must be from same repo (not a fork) - validated in first step
+    #   4. Branch name must match Renovate's pattern - validated in first step
+    #   5. Only modifies CHANGELOG.md, not arbitrary files
     if: |
       github.actor == 'renovate[bot]' &&
       (
@@ -23,13 +29,28 @@ jobs:
       contents: write
 
     steps:
-      - name: Validate PR is from same repository
+      - name: Validate PR source and branch
+        env:
+          PR_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          PR_BASE_REPO: ${{ github.repository }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          if [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+          # Security check 1: Ensure PR is from same repository (not a fork)
+          if [ "$PR_HEAD_REPO" != "$PR_BASE_REPO" ]; then
             echo "Error: This workflow only supports PRs from the same repository, not forks."
             echo "Fork PRs cannot be updated because GITHUB_TOKEN lacks push access to external repos."
             exit 1
           fi
+
+          # Security check 2: Ensure branch name matches Renovate's naming pattern
+          # Renovate creates branches like: renovate/netbirdio-netbird-0.x
+          if ! echo "$PR_BRANCH" | grep -qE '^renovate/'; then
+            echo "Error: Branch name '$PR_BRANCH' does not match expected Renovate pattern (renovate/*)."
+            echo "This workflow only processes branches created by Renovate."
+            exit 1
+          fi
+
+          echo "Security checks passed: same-repo PR from Renovate branch"
 
       - name: Checkout PR branch
         uses: actions/checkout@v6.0.2
