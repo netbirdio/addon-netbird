@@ -32,7 +32,11 @@ jobs:
         id: version
         run: |
           # Extract version from config.yaml
-          VERSION=$(grep -E '^version:' netbird/config.yaml | sed 's/version:\s*//' | tr -d '"' | tr -d "'")
+          VERSION=$(grep -m 1 -E '^[[:space:]]*version:' netbird/config.yaml | sed -E 's/^[[:space:]]*version:[[:space:]]*//' | tr -d '"' | tr -d "'")
+          if [ -z "$VERSION" ]; then
+            echo "Failed to extract NetBird version from netbird/config.yaml" >&2
+            exit 1
+          fi
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "Detected NetBird version: ${VERSION}"
 
