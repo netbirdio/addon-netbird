@@ -23,10 +23,19 @@ jobs:
       contents: write
 
     steps:
+      - name: Validate PR is from same repository
+        run: |
+          if [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+            echo "Error: This workflow only supports PRs from the same repository, not forks."
+            echo "Fork PRs cannot be updated because GITHUB_TOKEN lacks push access to external repos."
+            exit 1
+          fi
+
       - name: Checkout PR branch
         uses: actions/checkout@v6.0.2
         with:
-          ref: ${{ github.head_ref }}
+          # Use event payload ref which works reliably for same-repo PRs
+          ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
