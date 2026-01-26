@@ -91,18 +91,14 @@ jobs:
             fi
           fi
 
-          # Create the new changelog entry
-          NEW_ENTRY="## [v${VERSION}] - ${RELEASE_DATE}
-
-          ### Changed
-          - Updated to NetBird v${VERSION}
-          "
+          # Create the new changelog entry with consistent newline handling
+          NEW_ENTRY="## [v${VERSION}] - ${RELEASE_DATE}"$'\n'
+          NEW_ENTRY+=$'\n'"### Changed"$'\n'
+          NEW_ENTRY+="- Updated to NetBird v${VERSION}"$'\n'
 
           # Add upstream release notes if available
           if [ "$HAS_NOTES" = "true" ]; then
-            NEW_ENTRY="${NEW_ENTRY}
-          ### Upstream Release Notes
-          "
+            NEW_ENTRY+=$'\n'"### Upstream Release Notes"$'\n'
             # Process release notes - convert to proper markdown format
             while IFS= read -r line; do
               # Skip empty lines at start
@@ -110,7 +106,7 @@ jobs:
                 continue
               fi
               started=true
-              NEW_ENTRY="${NEW_ENTRY}${line}"$'\n'
+              NEW_ENTRY+="${line}"$'\n'
             done < /tmp/release_notes.md
           fi
 
