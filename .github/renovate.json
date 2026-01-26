@@ -86,15 +86,20 @@
       "automerge": true
     },
     {
+      "description": "NetBird: group updates, add label for changelog automation, automerge minor/patch only",
       "groupName": "NetBird",
       "matchDatasources": [
         "github-releases"
       ],
       "matchDepNames": [
         "netbirdio/netbird"
+      ],
+      "addLabels": [
+        "netbird-update"
       ]
     },
     {
+      "description": "NetBird: automerge minor/patch (major updates require manual review)",
       "matchDatasources": [
         "github-releases"
       ],

@@ -1,0 +1,199 @@
+---
+name: Update Changelog
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'netbird/Dockerfile'
+      - 'netbird/config.yaml'
+
+jobs:
+  update-changelog:
+    name: Update changelog for NetBird releases
+    runs-on: ubuntu-latest
+    # SECURITY: This workflow has write permissions to push commits.
+    # Multiple safeguards prevent misuse:
+    #   1. Actor must be 'renovate[bot]' (GitHub-verified bot identity)
+    #   2. PR title must contain 'netbirdio/netbird' OR have 'netbird-update' label
+    #   3. PR must be from same repo (not a fork) - validated in first step
+    #   4. Branch name must match Renovate's pattern - validated in first step
+    #   5. Only modifies CHANGELOG.md, not arbitrary files
+    if: |
+      github.actor == 'renovate[bot]' &&
+      (
+        contains(github.event.pull_request.title, 'netbirdio/netbird') ||
+        contains(join(github.event.pull_request.labels.*.name, ','), 'netbird-update')
+      )
+    permissions:
+      contents: write
+
+    steps:
+      - name: Validate PR source and branch
+        env:
+          PR_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          PR_BASE_REPO: ${{ github.repository }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          # Security check 1: Ensure PR is from same repository (not a fork)
+          if [ "$PR_HEAD_REPO" != "$PR_BASE_REPO" ]; then
+            echo "Error: This workflow only supports PRs from the same repository, not forks."
+            echo "Fork PRs cannot be updated because GITHUB_TOKEN lacks push access to external repos."
+            exit 1
+          fi
+
+          # Security check 2: Ensure branch name matches Renovate's naming pattern
+          # Renovate creates branches like: renovate/netbirdio-netbird-0.x
+          if ! echo "$PR_BRANCH" | grep -qE '^renovate/'; then
+            echo "Error: Branch name '$PR_BRANCH' does not match expected Renovate pattern (renovate/*)."
+            echo "This workflow only processes branches created by Renovate."
+            exit 1
+          fi
+
+          echo "Security checks passed: same-repo PR from Renovate branch"
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v6.0.2
+        with:
+          # Use event payload ref which works reliably for same-repo PRs
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract new version from PR
+        id: version
+        run: |
+          # Extract version from config.yaml
+          # Strip leading 'v' characters since config.yaml may contain "v0.64.1" but we add 'v' explicitly later
+          VERSION=$(grep -m 1 -E '^[[:space:]]*version:' netbird/config.yaml | sed -E 's/^[[:space:]]*version:[[:space:]]*//' | tr -d '"' | tr -d "'" | sed -E 's/^v+//')
+          if [ -z "$VERSION" ]; then
+            echo "Failed to extract NetBird version from netbird/config.yaml" >&2
+            exit 1
+          fi
+          # Validate that the extracted version looks like a semantic version (e.g., 0.64.1)
+          if ! printf '%s\n' "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Invalid NetBird version '$VERSION' extracted from netbird/config.yaml; expected semantic version (e.g., 0.64.1)" >&2
+            exit 1
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Detected NetBird version: ${VERSION}"
+
+      - name: Fetch upstream release notes
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # Fetch release notes from upstream repo
+          RELEASE_BODY=$(gh api "repos/netbirdio/netbird/releases/tags/v${VERSION}" --jq '.body // empty' 2>/dev/null || echo "")
+
+          # NOTE: We use the upstream release date (published_at), not the integration date.
+          # This makes it easier to track which upstream version corresponds to which release,
+          # and aligns the addon changelog with upstream NetBird release timeline.
+          # If you prefer integration dates, replace this with: RELEASE_DATE=$(date +%Y-%m-%d)
+          RELEASE_DATE=$(gh api "repos/netbirdio/netbird/releases/tags/v${VERSION}" --jq '.published_at // empty' 2>/dev/null | cut -d'T' -f1 || echo "")
+
+          if [ -z "$RELEASE_DATE" ]; then
+            echo "Error: Unable to fetch release date for NetBird v${VERSION}. Failing workflow to avoid using an incorrect date in the changelog."
+            exit 1
+          fi
+
+          echo "release_date=${RELEASE_DATE}" >> "$GITHUB_OUTPUT"
+
+          # Save release body to file for multiline handling
+          if [ -n "$RELEASE_BODY" ]; then
+            echo "$RELEASE_BODY" > /tmp/release_notes.md
+            echo "has_notes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_notes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update CHANGELOG.md
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          RELEASE_DATE="${{ steps.release.outputs.release_date }}"
+          HAS_NOTES="${{ steps.release.outputs.has_notes }}"
+          CHANGELOG_FILE="netbird/CHANGELOG.md"
+
+          # Check if this version already exists in changelog
+          if grep -q "## \[v${VERSION}\]" "$CHANGELOG_FILE"; then
+            if [ "${FORCE_CHANGELOG_UPDATE:-false}" != "true" ]; then
+              echo "Version v${VERSION} already exists in changelog, skipping update. Set FORCE_CHANGELOG_UPDATE=true to force regenerating this entry."
+              exit 0
+            else
+              echo "Version v${VERSION} already exists in changelog, but FORCE_CHANGELOG_UPDATE=true is set; regenerating changelog entry."
+            fi
+          fi
+
+          # Create the new changelog entry with consistent newline handling
+          NEW_ENTRY="## [v${VERSION}] - ${RELEASE_DATE}"$'\n'
+          NEW_ENTRY+=$'\n'"### Changed"$'\n'
+          NEW_ENTRY+="- Updated to NetBird v${VERSION}"$'\n'
+
+          # Add upstream release notes if available
+          if [ "$HAS_NOTES" = "true" ]; then
+            NEW_ENTRY+=$'\n'"### Upstream Release Notes"$'\n'
+            # Process release notes - convert to proper markdown format
+            while IFS= read -r line; do
+              # Skip empty lines at start
+              if [ -z "$line" ] && [ -z "${started:-}" ]; then
+                continue
+              fi
+              started=true
+              NEW_ENTRY+="${line}"$'\n'
+            done < /tmp/release_notes.md
+          fi
+
+          # Insert new entry after the header section (before first existing version entry)
+          # Find the line number of the first existing version entry (e.g., "## [v1.2.3]")
+          FIRST_VERSION_LINE=$(grep -n '^## \[v' "$CHANGELOG_FILE" | head -n 1 | cut -d: -f1 || true)
+
+          if [ -n "$FIRST_VERSION_LINE" ]; then
+            # Insert the new entry before the first existing version entry
+            # Note: No extra blank line needed - header section already ends with one
+            {
+              head -n "$((FIRST_VERSION_LINE - 1))" "$CHANGELOG_FILE"
+              printf '%s\n' "$NEW_ENTRY"
+              tail -n "+$FIRST_VERSION_LINE" "$CHANGELOG_FILE"
+            } > "${CHANGELOG_FILE}.tmp"
+          else
+            # If no version entries are found, append the new entry to the end
+            {
+              cat "$CHANGELOG_FILE"
+              printf '%s\n' "$NEW_ENTRY"
+            } > "${CHANGELOG_FILE}.tmp"
+          fi
+          mv "${CHANGELOG_FILE}.tmp" "$CHANGELOG_FILE"
+
+          echo "Updated changelog with v${VERSION} entry"
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet netbird/CHANGELOG.md; then
+            echo "No changelog changes to commit"
+            exit 0
+          fi
+
+          git add netbird/CHANGELOG.md
+          git commit -m "📝 Update CHANGELOG.md for NetBird v${{ steps.version.outputs.version }}"
+
+          # Push with retry logic to handle race conditions (e.g., Renovate force-push while running)
+          MAX_RETRIES=3
+          for attempt in $(seq 1 $MAX_RETRIES); do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+
+            if [ "$attempt" -lt "$MAX_RETRIES" ]; then
+              echo "Push failed (attempt $attempt/$MAX_RETRIES), rebasing and retrying..."
+              git pull --rebase origin "${{ github.event.pull_request.head.ref }}"
+            fi
+          done
+
+          echo "Error: git push failed after $MAX_RETRIES attempts. The PR branch may have conflicts." >&2
+          exit 1
