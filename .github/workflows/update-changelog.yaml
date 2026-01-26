@@ -103,14 +103,26 @@ jobs:
             done < /tmp/release_notes.md
           fi
 
-          # Insert new entry after the header section (after line 6)
-          {
-            head -n 6 "$CHANGELOG_FILE"
-            echo ""
-            echo "$NEW_ENTRY"
-            tail -n +8 "$CHANGELOG_FILE"
-          } > "${CHANGELOG_FILE}.tmp"
+          # Insert new entry after the header section (before first existing version entry)
+          # Find the line number of the first existing version entry (e.g., "## [v1.2.3]")
+          FIRST_VERSION_LINE=$(grep -n '^## \[v' "$CHANGELOG_FILE" | head -n 1 | cut -d: -f1 || true)
 
+          if [ -n "$FIRST_VERSION_LINE" ]; then
+            # Insert the new entry before the first existing version entry
+            {
+              head -n "$((FIRST_VERSION_LINE - 1))" "$CHANGELOG_FILE"
+              echo ""
+              echo "$NEW_ENTRY"
+              tail -n "+$FIRST_VERSION_LINE" "$CHANGELOG_FILE"
+            } > "${CHANGELOG_FILE}.tmp"
+          else
+            # If no version entries are found, append the new entry to the end
+            {
+              cat "$CHANGELOG_FILE"
+              echo ""
+              echo "$NEW_ENTRY"
+            } > "${CHANGELOG_FILE}.tmp"
+          fi
           mv "${CHANGELOG_FILE}.tmp" "$CHANGELOG_FILE"
 
           echo "Updated changelog with v${VERSION} entry"
