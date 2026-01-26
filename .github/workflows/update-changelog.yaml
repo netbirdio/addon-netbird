@@ -31,7 +31,8 @@ jobs:
         id: version
         run: |
           # Extract version from config.yaml
-          VERSION=$(grep -m 1 -E '^[[:space:]]*version:' netbird/config.yaml | sed -E 's/^[[:space:]]*version:[[:space:]]*//' | tr -d '"' | tr -d "'")
+          # Strip 'v' prefix since config.yaml contains "v0.64.1" but we add 'v' explicitly later
+          VERSION=$(grep -m 1 -E '^[[:space:]]*version:' netbird/config.yaml | sed -E 's/^[[:space:]]*version:[[:space:]]*//' | tr -d '"' | tr -d "'" | sed 's/^v//')
           if [ -z "$VERSION" ]; then
             echo "Failed to extract NetBird version from netbird/config.yaml" >&2
             exit 1
