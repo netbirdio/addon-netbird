@@ -160,7 +160,20 @@ jobs:
 
           git add netbird/CHANGELOG.md
           git commit -m "📝 Update CHANGELOG.md for NetBird v${{ steps.version.outputs.version }}"
-          if ! git push; then
-            echo "Error: git push failed. Please check the workflow logs, resolve any branch conflicts or permission issues, and retry." >&2
-            exit 1
-          fi
+
+          # Push with retry logic to handle race conditions (e.g., Renovate force-push while running)
+          MAX_RETRIES=3
+          for attempt in $(seq 1 $MAX_RETRIES); do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+
+            if [ "$attempt" -lt "$MAX_RETRIES" ]; then
+              echo "Push failed (attempt $attempt/$MAX_RETRIES), rebasing and retrying..."
+              git pull --rebase origin "${{ github.event.pull_request.head.ref }}"
+            fi
+          done
+
+          echo "Error: git push failed after $MAX_RETRIES attempts. The PR branch may have conflicts." >&2
+          exit 1
