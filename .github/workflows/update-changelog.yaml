@@ -153,16 +153,16 @@ jobs:
             # Insert the new entry before the first existing version entry
             {
               head -n "$((FIRST_VERSION_LINE - 1))" "$CHANGELOG_FILE"
-              echo ""
-              echo "$NEW_ENTRY"
+              printf '\n'
+              printf '%s\n' "$NEW_ENTRY"
               tail -n "+$FIRST_VERSION_LINE" "$CHANGELOG_FILE"
             } > "${CHANGELOG_FILE}.tmp"
           else
             # If no version entries are found, append the new entry to the end
             {
               cat "$CHANGELOG_FILE"
-              echo ""
-              echo "$NEW_ENTRY"
+              printf '\n'
+              printf '%s\n' "$NEW_ENTRY"
             } > "${CHANGELOG_FILE}.tmp"
           fi
           mv "${CHANGELOG_FILE}.tmp" "$CHANGELOG_FILE"
