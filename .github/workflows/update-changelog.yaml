@@ -122,4 +122,7 @@ jobs:
 
           git add netbird/CHANGELOG.md
           git commit -m "📝 Update CHANGELOG.md for NetBird v${{ steps.version.outputs.version }}"
-          git push
+          if ! git push; then
+            echo "Error: git push failed. Please check the workflow logs, resolve any branch conflicts or permission issues, and retry." >&2
+            exit 1
+          fi
