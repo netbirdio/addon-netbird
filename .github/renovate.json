@@ -66,6 +66,15 @@
       "automerge": true
     },
     {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "netbirdio/netbird"
+      ],
+      "enabled": false
+    },
+    {
       "groupName": "Add-on base image",
       "matchDatasources": [
         "docker"
