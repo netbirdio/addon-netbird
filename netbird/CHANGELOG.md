@@ -8,6 +8,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Note:** Dates reflect when the upstream NetBird version was released, not when
 it was integrated into this add-on. This aligns entries with the upstream release timeline.
 
+## [v0.64.2] - 2026-01-27
+
+### Changed
+- Updated to NetBird v0.64.2
+
+### Upstream Release Notes
+## Release Notes for v0.64.2
+
+### What's New
+#### Client Improvements
+- Consolidated **authentication logic** to improve maintainability and consistency.  
+  [#5010](https://github.com/netbirdio/netbird/pull/5010)
+- Added **IPv6 support** to the UDP WireGuard proxy.  
+  [#5169](https://github.com/netbirdio/netbird/pull/5169)
+- Fixed a **flaky JWT SSH test** to improve CI stability.  
+  [#5181](https://github.com/netbirdio/netbird/pull/5181)
+- Updated **Fyne UI** and added **retry handling** to the exit menu.  
+  [#5187](https://github.com/netbirdio/netbird/pull/5187)
+- Prevented **eBPF traffic** from being tracked in conntrack.  
+  [#5166](https://github.com/netbirdio/netbird/pull/5166)
+- Added support for **non-PTY, no-command interactive SSH sessions**.  
+  [#5093](https://github.com/netbirdio/netbird/pull/5093)
+
+#### Management & Identity
+- Fixed **validator warning messages** to improve clarity.  
+  [#5168](https://github.com/netbirdio/netbird/pull/5168)
+- Improved **peer deletion error handling**.  
+  [#5188](https://github.com/netbirdio/netbird/pull/5188)
+- Included **default groups claim** in the CLI audience.  
+  [#5186](https://github.com/netbirdio/netbird/pull/5186)
+- Added **user invite link** support for the embedded IdP.  
+  [#5157](https://github.com/netbirdio/netbird/pull/5157)
+
+**Full Changelog**: [v0.64.1...v0.64.2](https://github.com/netbirdio/netbird/compare/v0.64.1...v0.64.2)
+
 ## [v0.60.2] - 2025-11-17
 
 ### Changed
