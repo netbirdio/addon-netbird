@@ -8,6 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Note:** Dates reflect when the upstream NetBird version was released, not when
 it was integrated into this add-on. This aligns entries with the upstream release timeline.
 
+## [v0.64.3] - 2026-01-29
+
+### Changed
+- Updated to NetBird v0.64.3
+
+### Upstream Release Notes
+## What's Changed
+* [client] Remove redundant square bracket trimming in USP endpoint parsing by @pappz in https://github.com/netbirdio/netbird/pull/5197
+* [client] Refactor/optimise raw socket headers by @pappz in https://github.com/netbirdio/netbird/pull/5174
+* [management] fix ephemeral peers being not removed by @crn4 in https://github.com/netbirdio/netbird/pull/5203
+* [management] fix skip of ephemeral peers on deletion by @crn4 in https://github.com/netbirdio/netbird/pull/5206
+* [client] Stop NetBird on firewall init failure by @lixmal in https://github.com/netbirdio/netbird/pull/5208
+* [management] Streamline domain validation by @lixmal in https://github.com/netbirdio/netbird/pull/5211
+* [client] Fix WG watcher missing initial handshake by @pappz in https://github.com/netbirdio/netbird/pull/5213
+
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.64.2...v0.64.3
+
 ## [v0.64.2] - 2026-01-27
 
 ### Changed
