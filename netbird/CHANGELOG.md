@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.64.5] - 2026-02-03
+
+### Changed
+- Updated to NetBird v0.64.5
+
+### Upstream Release Notes
+## What's Changed
+* Add selfhosting video by @braginini in https://github.com/netbirdio/netbird/pull/5235
+* [management] adding account id validation to accessible peers handler by @pascal-fischer in https://github.com/netbirdio/netbird/pull/5246
+
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.64.4...v0.64.5
+
 ## [v0.64.4] - 2026-02-01
 
 ### Changed
