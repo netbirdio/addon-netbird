@@ -1,5 +1,72 @@
 # Changelog
 
+## [v0.64.6] - 2026-02-12
+
+### Changed
+- Updated to NetBird v0.64.6
+
+### Upstream Release Notes
+## Release Notes for v0.64.6
+
+### What's New
+
+🚨 Security Fix
+Security: Fixed account impersonation validation in management API
+
+Fixed a vulnerability in the management server's authentication middleware where the ?account= query parameter could be used to impersonate arbitrary accounts without proper validation when getting a list of accessible peers. It requires the attacker to have prior knowledge of the target accounts' and peer IDs. 
+
+The fix adds explicit validation via IsValidChildAccount() before allowing account switching. Account impersonation is now only permitted when the target account is confirmed as a legitimate child account of the
+  requesting user's parent account.
+
+Affected component: Management server HTTP middleware (auth_middleware.go) and `/api/peers/<peer_id>/accessible-peers` endpoint
+
+Severity: High — an authenticated user could potentially access or act on behalf of accounts they should not have access to by passing an arbitrary account parameter and fetching the list of accessible peers.
+
+**Recommendation**: All self-hosted deployments should upgrade to this version.
+
+#### Client Improvements
+- Added **missing BSD flags** to the debug bundle.  
+  [#5254](https://github.com/netbirdio/netbird/pull/5254)
+- Cached the result of `wgInterface.ToInterface()` using `sync.Once` for better performance.  
+  [#5256](https://github.com/netbirdio/netbird/pull/5256)
+- Fixed **nil pointer panic** in the ICE agent during sleep/wake cycles.  
+  [#5261](https://github.com/netbirdio/netbird/pull/5261)
+- Always log **DNS forwarder responses** for improved troubleshooting.  
+  [#5262](https://github.com/netbirdio/netbird/pull/5262)
+- Fixed **netstack detection** and added a **WireGuard port option**.  
+  [#5251](https://github.com/netbirdio/netbird/pull/5251)
+- Corrected wrong URL logging for `DefaultAdminURL`.  
+  [#5252](https://github.com/netbirdio/netbird/pull/5252)
+- Added **timing measurements** to `handleSync` for better observability.  
+  [#5228](https://github.com/netbirdio/netbird/pull/5228)
+- Fixed duplicate firewall rules in **USP filter**.  
+  [#5269](https://github.com/netbirdio/netbird/pull/5269)
+- Added environment variable to **skip DNS probing** when needed.  
+  [#5270](https://github.com/netbirdio/netbird/pull/5270)
+- Fixed race condition and ensured correct **message ordering in Relay**.  
+  [#5265](https://github.com/netbirdio/netbird/pull/5265)
+- Ensured login is checked in **foreground mode** when required.  
+  [#5295](https://github.com/netbirdio/netbird/pull/5295)
+- Fixed multiple **panics in device and engine code**.  
+  [#5287](https://github.com/netbirdio/netbird/pull/5287)
+- Cleaned up **stale nftables entries without handle**.  
+  [#5272](https://github.com/netbirdio/netbird/pull/5272)
+
+#### Management Improvements
+- Fixed incorrectly setting **disconnected status** for connected peers.  
+  [#5247](https://github.com/netbirdio/netbird/pull/5247)
+- Added **gRPC debounce for message types** to reduce noise.  
+  [#5239](https://github.com/netbirdio/netbird/pull/5239)
+- Added validation of **stream start time** for connecting peers.  
+  [#5267](https://github.com/netbirdio/netbird/pull/5267)
+- Fixed `ischild` check logic.  
+  [#5279](https://github.com/netbirdio/netbird/pull/5279)
+
+### New Contributors
+- @eyJhb made their first contribution in [#5252](https://github.com/netbirdio/netbird/pull/5252)
+
+**Full Changelog**: [v0.64.5...v0.64.6](https://github.com/netbirdio/netbird/compare/v0.64.5...v0.64.6)
+
 ## [v0.64.5] - 2026-02-03
 
 ### Changed
