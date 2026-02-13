@@ -1,5 +1,96 @@
 # Changelog
 
+## [v0.65.0] - 2026-02-13
+
+### Changed
+- Updated to NetBird v0.65.0
+
+### Upstream Release Notes
+# Release Notes for v0.65.0
+
+## What's New
+
+### 🔀 Reverse Proxy
+
+NetBird now includes a built-in reverse proxy in the management server, enabling proxied access to backend services through your NetBird network. Allowing you to expose your services to the public with the option to secure them with SSO, PINs, or passwords.
+
+No VPN client required for end users. Just point a custom domain at your NetBird server, configure the proxy in the dashboard, and your internal services are securely accessible from any browser. Think of it as a self-hosted alternative to Cloudflare Tunnels, but without the MITM and fully under your control.
+
+**Key features:**
+
+* **Custom domains** - Map your own domains to internal services and let NetBird handle TLS and routing via CNAME verification
+* **Built-in authentication** - Protect exposed services with SSO (via your configured IdP), PIN codes, passwords, or magic links directly from the dashboard
+* **Multiple targets** - Route traffic to one or more backend peers or resources with optional path-based routing
+* **Access logs** - Monitor who's accessing your proxied services with built-in logging
+* **Proxy settings** - Fine-tune behavior with options like host header passthrough and redirect rewriting
+
+#### Add a Service
+
+Expose any internal service by selecting a subdomain and adding one or more backend targets. Each target points to a peer or resource on your network.
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/3bd8b332-a49d-4f3e-ba67-b95615b362ca" />
+
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/0ca780b9-5a10-406b-ae72-4a84586f8dfd" />
+
+#### Custom Domains
+
+Bring your own domain by adding a CNAME record pointing to your NetBird proxy cluster. NetBird handles TLS certificate provisioning automatically.
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/9d162966-7815-4bd2-a2dd-1993e13ae891" />
+
+#### Authentication
+
+Secure your exposed services with multiple authentication methods. Enable one or combine several for layered protection.
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/fd385a87-f7fd-41c0-8998-fe00113d8e57" />
+
+
+#### Settings
+
+Fine-tune proxy behavior with options like passing the original Host header to your backend or rewriting redirect URLs to use the public domain.
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/1b19c92c-1f8b-40ce-a8ce-a30f21ec5d0d" />
+
+Learn more:
+* [Reverse Proxy Overview](https://docs.netbird.io/manage/reverse-proxy)
+* [Custom Domains](https://docs.netbird.io/manage/reverse-proxy/custom-domains)
+* [Authentication](https://docs.netbird.io/manage/reverse-proxy/authentication)
+
+> NetBird cloud support is coming soon, with hosted reverse proxy nodes.
+
+
+### 🏗️ Self-Hosted Improvements
+
+* Added **combined NetBird server** binary for simplified self-hosted deployments, reducing the number of containers needed to run NetBird.
+  [#5232](https://github.com/netbirdio/netbird/pull/5232)
+
+### 🔒 Management Improvements
+
+* **Enforced access control on accessible peers**, ensuring proper authorization checks when querying the accessible peers endpoint.
+  [#5301](https://github.com/netbirdio/netbird/pull/5301)
+* Added **cloud API spec to the public OpenAPI** definition with REST client support.
+  [#5222](https://github.com/netbirdio/netbird/pull/5222)
+
+### 🖥️ Client Improvements
+
+* Added **early message buffer for the relay client**, preventing message loss during connection establishment.
+  [#5282](https://github.com/netbirdio/netbird/pull/5282)
+* **Refactored relay connection container** for improved reliability and code maintainability.
+  [#5271](https://github.com/netbirdio/netbird/pull/5271)
+
+## What's Changed
+
+* [misc] Update sign pipeline version by @mlsmaycon in [#5296](https://github.com/netbirdio/netbird/pull/5296)
+* [self-hosted] add netbird server by @braginini in [#5232](https://github.com/netbirdio/netbird/pull/5232)
+* [management] Enforce access control on accessible peers by @bcmmbaga in [#5301](https://github.com/netbirdio/netbird/pull/5301)
+* [misc] Add cloud api spec to public open api with rest client by @bcmmbaga in [#5222](https://github.com/netbirdio/netbird/pull/5222)
+* [client] Add early message buffer for relay client by @pappz in [#5282](https://github.com/netbirdio/netbird/pull/5282)
+* [client] Refactor/relay conn container by @pappz in [#5271](https://github.com/netbirdio/netbird/pull/5271)
+* [management, reverse proxy] Add reverse proxy feature by @pascal-fischer in [#5291](https://github.com/netbirdio/netbird/pull/5291)
+
+**Full Changelog**: [v0.64.6...v0.65.0](https://github.com/netbirdio/netbird/compare/v0.64.6...v0.65.0)
+
 ## [v0.64.6] - 2026-02-12
 
 ### Changed
