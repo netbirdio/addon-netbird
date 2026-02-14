@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.65.1] - 2026-02-14
+
+### Changed
+- Updated to NetBird v0.65.1
+
+### Upstream Release Notes
+## What's Changed
+* [misc] Fix reverse proxy getting started messaging by @braginini in https://github.com/netbirdio/netbird/pull/5317
+* [management] Move service reload outside transaction in account settings update by @bcmmbaga in https://github.com/netbirdio/netbird/pull/5325
+
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.65.0...v0.65.1
+
 ## [v0.65.0] - 2026-02-13
 
 ### Changed
