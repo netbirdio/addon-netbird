@@ -1,5 +1,52 @@
 # Changelog
 
+## [v0.65.2] - 2026-02-17
+
+### Changed
+- Updated to NetBird v0.65.2
+
+### Upstream Release Notes
+## Release Notes for v0.65.2
+
+### What's New
+#### Client Improvements
+- Optimized **Windows DNS performance** with domain batching and batch mode.  
+  [#5264](https://github.com/netbirdio/netbird/pull/5264)
+- Reset **WireGuard endpoint** on ICE session changes during relay fallback.  
+  [#5283](https://github.com/netbirdio/netbird/pull/5283)
+- Refactored **WireGuard endpoint setup** with role-based proxy activation.  
+  [#5277](https://github.com/netbirdio/netbird/pull/5277)
+- Exported **lazy connection environment variables** for mobile clients.  
+  [#5310](https://github.com/netbirdio/netbird/pull/5310)
+- Ignored false positive **lint alert** in client code.  
+  [#5370](https://github.com/netbirdio/netbird/pull/5370)
+
+#### Proxy & Reverse Proxy
+- Added **listener-side Proxy Protocol support** and enabled it in Traefik.  
+  [#5332](https://github.com/netbirdio/netbird/pull/5332)
+- Added **WebSocket support** to the proxy.  
+  [#5312](https://github.com/netbirdio/netbird/pull/5312)
+- Removed unused **OIDC config flags** from proxy configuration.  
+  [#5369](https://github.com/netbirdio/netbird/pull/5369)
+- Infrastructure updates for **proxy components**.  
+  [#5365](https://github.com/netbirdio/netbird/pull/5365)
+
+#### Management Improvements
+- Fixed **UTC difference issue** in peer “last seen” status.  
+  [#5348](https://github.com/netbirdio/netbird/pull/5348)
+- Ensured **Management starts even if external IdP is down**.  
+  [#5367](https://github.com/netbirdio/netbird/pull/5367)
+- Added flag to **disable the legacy gRPC endpoint**.  
+  [#5372](https://github.com/netbirdio/netbird/pull/5372)
+
+#### Documentation & Misc
+- Added additional **proxy domain instructions**.  
+  [#5328](https://github.com/netbirdio/netbird/pull/5328)
+- Added an extra **CNAME configuration example**.  
+  [#5341](https://github.com/netbirdio/netbird/pull/5341)
+
+**Full Changelog**: [v0.65.1...v0.65.2](https://github.com/netbirdio/netbird/compare/v0.65.1...v0.65.2)
+
 ## [v0.65.1] - 2026-02-14
 
 ### Changed
