@@ -1,25 +1,83 @@
 # Changelog
 
-## [v0.66.4] - 2026-03-11
+## [v0.67.0] - 2026-03-23
 
 ### Changed
-- Updated to NetBird v0.66.4
+- Updated to NetBird v0.67.0
 
 ### Upstream Release Notes
-## Release Notes for v0.66.4
+## Release Notes for v0.67.0
 
 ### What's New
+#### Major Networking & Proxy Enhancements
+- Introduced **Layer 4 (L4) capabilities (TLS/TCP/UDP)** across client, management, and proxy.  
+  https://github.com/netbirdio/netbird/pull/5530
+- Added **header-based authentication, access restrictions, and session idle timeout** for proxy services.  
+  https://github.com/netbirdio/netbird/pull/5587
+- Added support for **wildcard certificates** and improved certificate handling (read from disk if available).  
+  https://github.com/netbirdio/netbird/pull/5583  
+  https://github.com/netbirdio/netbird/pull/5574
+- Added **require_subdomain capability** for proxy clusters.  
+  https://github.com/netbirdio/netbird/pull/5628
+- Improved proxy reliability with **domain switching fixes and recovery after cleanup**.  
+  https://github.com/netbirdio/netbird/pull/5585  
+  https://github.com/netbirdio/netbird/pull/5617
+
+> Dashboard support and documentation update are coming soon.
+
+#### Client Improvements
+- Added **client metrics support** and enhanced observability.  
+  https://github.com/netbirdio/netbird/pull/5512
+- Added **health check flag** and daemon status output to `netbird status`.  
+  https://github.com/netbirdio/netbird/pull/5650
+- Restart engine automatically when **peer IP changes**.  
+  https://github.com/netbirdio/netbird/pull/5614
+- Improved **DNS handling, IPv6 formatting, and probe thread safety**.  
+  https://github.com/netbirdio/netbird/pull/5603  
+  https://github.com/netbirdio/netbird/pull/5576
+- Added **MTU option and DNSLabels support** to embedded client.  
+  https://github.com/netbirdio/netbird/pull/5550  
+  https://github.com/netbirdio/netbird/pull/5493
+- Refactored **auto-update workflow** and simplified container entrypoint.  
+  https://github.com/netbirdio/netbird/pull/5448  
+  https://github.com/netbirdio/netbird/pull/5652
+- Fixed multiple issues including **duplicate logs, firewall init behavior, and container logging**.  
+  https://github.com/netbirdio/netbird/pull/5609  
+  https://github.com/netbirdio/netbird/pull/5621
+- Additional client fixes and improvements.  
+  https://github.com/netbirdio/netbird/pull/5510  
+  https://github.com/netbirdio/netbird/pull/5613  
+  https://github.com/netbirdio/netbird/pull/5622  
+- Updated gvisor to build with Go 1.26.x.  
+  https://github.com/netbirdio/netbird/pull/5447
 
 #### Management Improvements
-- Create a **shallow copy of the account when buffering** to improve memory safety and performance.  
-  https://github.com/netbirdio/netbird/pull/5572
+- Added **reverse proxy cluster APIs and domain-based targeting**.  
+  https://github.com/netbirdio/netbird/pull/5611  
+  https://github.com/netbirdio/netbird/pull/5612
+- Improved **concurrency handling and proxy exclusions from peer approval**.  
+  https://github.com/netbirdio/netbird/pull/5584  
+  https://github.com/netbirdio/netbird/pull/5588
 
-- Set **network map components by default** and optimize **memory usage**.  
-  https://github.com/netbirdio/netbird/pull/5575
+#### Proxy Enhancements
+- Added **log-level flag and usage improvements**.  
+  https://github.com/netbirdio/netbird/pull/5594
 
-#### Self-Hosted Improvements
-- Removed **extra proxy domain instructions** from the getting started guide to simplify setup.  
-  https://github.com/netbirdio/netbird/pull/5573
+#### Security & Packaging
+- Added **GPG signing key support for RPM packages**.  
+  https://github.com/netbirdio/netbird/pull/5581
 
+#### Miscellaneous
+- Added **image build after merge to main** workflow.  
+  https://github.com/netbirdio/netbird/pull/5605
+- Added **netbird-tui** to community projects.  
+  https://github.com/netbirdio/netbird/pull/5568
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.66.3...v0.66.4
+### New Contributors
+- @n0pashkov made their first contribution in https://github.com/netbirdio/netbird/pull/5568
+- @tham-le made their first contribution in https://github.com/netbirdio/netbird/pull/5550
+- @wehagy made their first contribution in https://github.com/netbirdio/netbird/pull/5447
+- @mango766 made their first contribution in https://github.com/netbirdio/netbird/pull/5603
+- @Wouter0100 made their first contribution in https://github.com/netbirdio/netbird/pull/5493
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.66.4...v0.67.0
