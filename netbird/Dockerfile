@@ -5,7 +5,11 @@ FROM netbirdio/netbird:0.67.4 as netbird-container
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
-RUN apk add --no-cache nftables=1.1.5-r2
+RUN apk add --no-cache \
+    iptables=1.8.11-r1 \
+    nftables=1.1.5-r2 \
+    && ln -sf /sbin/xtables-nft-multi /sbin/ip6tables \
+    && ln -sf /sbin/xtables-nft-multi /sbin/iptables
 
 # Copy root filesystem
 COPY rootfs /
