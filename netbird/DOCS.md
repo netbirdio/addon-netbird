@@ -97,12 +97,6 @@ Extra environment variables to pass to the NetBird client.
 This is a list of environment variables that will be passed to the NetBird client.
 You can use this to configure the client further.
 
-**Important:** Variable names must start with the `NB_` prefix and contain only
-uppercase letters, digits, and underscores (e.g., `NB_INTERFACE_NAME`,
-`NB_DNS_RESOLVER_ADDRESS`). Variables not matching the `NB_` prefix pattern will
-be rejected. This restriction ensures only NetBird-specific variables are set and
-prevents accidental modification of system environment variables.
-
 ## Changelog & Releases
 
 This repository keeps a change log using [GitHub's releases][releases]

@@ -92,9 +92,9 @@ for var in $(bashio::config 'env_vars|keys'); do
     name=$(bashio::config "env_vars[${var}].name")
     value=$(bashio::config "env_vars[${var}].value")
 
-    # Validate that the variable name matches the expected NB_ prefix pattern
-    if [[ ! "${name}" =~ ^NB_[A-Z0-9_]+$ ]]; then
-        bashio::log.warning "Skipping invalid environment variable name: ${name} (must start with NB_ and match NB_[A-Z0-9_]+)"
+    # Validate that the variable name matches the expected pattern
+    if [[ ! "${name}" =~ ^[A-Z_][A-Z0-9_]*$ ]]; then
+        bashio::log.warning "Skipping invalid environment variable name: ${name} (must match pattern [A-Z_][A-Z0-9_]*)"
         continue
     fi
 
