@@ -37,21 +37,21 @@ options+=(--foreground-mode)
 options+=(--config "${CONFIG_PATH}")
 options+=(--log-file console)
 
-if [ "${admin_url}" = "" ]; then
+if [ "${admin_url}" = "" ] || [ "${admin_url}" = "null" ]; then
     bashio::log.info "Using Default Admin URL"
 else
     bashio::log.info "Using ${admin_url} as Admin URL"
     options+=(--admin-url "${admin_url}")
 fi
 
-if [ "${management_url}" = "" ]; then
+if [ "${management_url}" = "" ] || [ "${management_url}" = "null" ]; then
     bashio::log.info "Using Default Management URL"
 else
     bashio::log.info "Using ${management_url} as Management URL"
     options+=(--management-url "${management_url}")
 fi
 
-if [ "${setup_key}" = "" ]; then
+if [ "${setup_key}" = "" ] || [ "${setup_key}" = "null" ]; then
     bashio::log.info "No Setup Key Set"
     bashio::log.info "This client will only show up in dashboards it's already registered with."
 else
@@ -59,7 +59,7 @@ else
     export NB_SETUP_KEY="${setup_key}"
 fi
 
-if [ "${hostname}" = "" ]; then
+if [ "${hostname}" = "" ] || [ "${hostname}" = "null" ]; then
     bashio::log.info "No Hostname Set"
     bashio::log.info "This client will use the default (<docker container id>-netbird-client) as hostname in peers."
 else
@@ -112,13 +112,18 @@ done
 # NetBird checks for systemd-resolved by looking for a specific comment in /etc/resolv.conf
 # This ensures NetBird can properly detect and configure DNS settings on the host
 if ! grep -q '# systemd-resolved' /etc/resolv.conf 2>/dev/null; then
-    RESOLV_TMP=$(mktemp /tmp/resolv.conf.XXXXXX)
-    if { printf '# systemd-resolved\n'; cat /etc/resolv.conf; } > "${RESOLV_TMP}" \
-        && mv -f "${RESOLV_TMP}" /etc/resolv.conf; then
-        bashio::log.debug "Prepended systemd-resolved marker to /etc/resolv.conf"
-    else
-        bashio::log.error "Failed to update /etc/resolv.conf for systemd-resolved workaround"
-        rm -f "${RESOLV_TMP}" 2>/dev/null
+    RESOLV_TMP=$(mktemp /tmp/resolv.conf.XXXXXX) || {
+        bashio::log.error "Failed to create temp file for resolv.conf workaround"
+        RESOLV_TMP=""
+    }
+    if [ -n "${RESOLV_TMP}" ]; then
+        if { printf '# systemd-resolved\n'; cat /etc/resolv.conf; } > "${RESOLV_TMP}" \
+            && mv -f "${RESOLV_TMP}" /etc/resolv.conf; then
+            bashio::log.debug "Prepended systemd-resolved marker to /etc/resolv.conf"
+        else
+            bashio::log.error "Failed to update /etc/resolv.conf for systemd-resolved workaround"
+            rm -f "${RESOLV_TMP}" 2>/dev/null
+        fi
     fi
 fi
 
