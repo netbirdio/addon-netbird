@@ -16,29 +16,47 @@ jobs:
   init:
     runs-on: ubuntu-latest
     name: Initialize builds
+    permissions:
+      contents: read
     outputs:
       changed_addons: ${{ steps.changed_addons.outputs.addons }}
       changed: ${{ steps.changed_addons.outputs.changed }}
     steps:
       - name: Check out the repository
         uses: actions/checkout@v6.0.2
+        with:
+          fetch-depth: 0
 
       - name: Get changed files
         id: changed_files
-        uses: jitterbit/get-changed-files@v1
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
+          CURRENT_SHA: ${{ github.sha }}
+        run: |
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            FILES=$(git diff --name-only "origin/${BASE_REF}...HEAD" | tr '\n' ' ')
+          else
+            FILES=$(git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" | tr '\n' ' ')
+          fi
+          echo "all=${FILES}" >> "$GITHUB_OUTPUT"
 
       - name: Find add-on directories
         id: addons
-        uses: home-assistant/actions/helpers/find-addons@master
+        uses: home-assistant/actions/helpers/find-addons@f6f29a7ee3fa0eccadf3620a7b9ee00ab54ec03b # master 2026-04-11
 
       - name: Get changed add-ons
         id: changed_addons
+        env:
+          ALL_CHANGED: ${{ steps.changed_files.outputs.all }}
+          ALL_ADDONS: ${{ steps.addons.outputs.addons }}
         run: |
           declare -a changed_addons
-          for addon in ${{ steps.addons.outputs.addons }}; do
-            if [[ "${{ steps.changed_files.outputs.all }}" =~ $addon ]]; then
+          for addon in $ALL_ADDONS; do
+            if [[ "$ALL_CHANGED" =~ $addon ]]; then
               for file in ${{ env.MONITORED_FILES }}; do
-                  if [[ "${{ steps.changed_files.outputs.all }}" =~ $addon/$file ]]; then
+                  if [[ "$ALL_CHANGED" =~ $addon/$file ]]; then
                     if [[ ! "${changed_addons[@]}" =~ $addon ]]; then
                       changed_addons+=("\"${addon}\",");
                     fi
@@ -75,24 +93,31 @@ jobs:
 
       - name: Get information
         id: info
-        uses: home-assistant/actions/helpers/info@master
+        uses: home-assistant/actions/helpers/info@f6f29a7ee3fa0eccadf3620a7b9ee00ab54ec03b # master 2026-04-11
         with:
           path: "./${{ matrix.addon }}"
 
       - name: Check if add-on should be built
         id: check
+        env:
+          INFO_IMAGE: ${{ steps.info.outputs.image }}
+          INFO_ARCHITECTURES: ${{ steps.info.outputs.architectures }}
+          BUILD_ARCH: ${{ matrix.arch }}
+          BUILD_ADDON: ${{ matrix.addon }}
+          HEAD_REF: ${{ github.head_ref }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [[ "${{ steps.info.outputs.image }}" == "null" ]]; then
+          if [[ "$INFO_IMAGE" == "null" ]]; then
             echo "Image property is not defined, skipping build"
             echo "build_arch=false" >> $GITHUB_OUTPUT;
-          elif [[ "${{ steps.info.outputs.architectures }}" =~ ${{ matrix.arch }} ]]; then
+          elif [[ "$INFO_ARCHITECTURES" =~ $BUILD_ARCH ]]; then
             echo "build_arch=true" >> $GITHUB_OUTPUT;
-            echo "image=$(echo ${{ steps.info.outputs.image }} | cut -d'/' -f3)" >> $GITHUB_OUTPUT;
-            if [[ -z "${{ github.head_ref }}" ]] && [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "image=$(echo "$INFO_IMAGE" | cut -d'/' -f3)" >> $GITHUB_OUTPUT;
+            if [[ -z "$HEAD_REF" ]] && [[ "$EVENT_NAME" == "push" ]]; then
                 echo "BUILD_ARGS=" >> $GITHUB_ENV;
             fi
           else
-            echo "${{ matrix.arch }} is not a valid arch for ${{ matrix.addon }}, skipping build";
+            echo "$BUILD_ARCH is not a valid arch for $BUILD_ADDON, skipping build";
             echo "build_arch=false" >> $GITHUB_OUTPUT;
           fi
 

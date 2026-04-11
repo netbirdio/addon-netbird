@@ -30,13 +30,13 @@ options:
   rosenpass_permissive: false
   env_vars: []
 schema:
-  admin_url: str
-  management_url: str
-  setup_key: str
-  hostname: str
+  admin_url: url?
+  management_url: url?
+  setup_key: str?
+  hostname: match(^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?$)?
   rosenpass: bool
   rosenpass_permissive: bool
   env_vars:
-    - name: match(^[A-Z_][A-Z0-9_]*$)
+    - name: match(^NB_[A-Z0-9_]+$)
       value: str
   log_level: list(trace|debug|info|notice|warning|error|fatal)?
