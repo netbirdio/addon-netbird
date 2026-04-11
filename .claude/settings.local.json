@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(shellcheck:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "mcp__plugin_greptile_greptile__get_merge_request",
+      "Bash(git pull:*)",
+      "Bash(git checkout:*)",
+      "Bash(gh pr create:*)",
+      "Bash(git reset:*)",
+      "mcp__plugin_github_github__pull_request_read"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "outputStyle": "Explanatory"
+}
