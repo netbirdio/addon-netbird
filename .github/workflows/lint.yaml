@@ -14,6 +14,8 @@ jobs:
   find:
     name: Find add-ons
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       addons: ${{ steps.addons.outputs.addons_list }}
     steps:
@@ -22,11 +24,13 @@ jobs:
 
       - name: 🔍 Find add-on directories
         id: addons
-        uses: home-assistant/actions/helpers/find-addons@master
+        uses: home-assistant/actions/helpers/find-addons@f6f29a7ee3fa0eccadf3620a7b9ee00ab54ec03b # master 2026-04-11
 
   lint:
     name: Lint add-on ${{ matrix.path }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: find
     strategy:
       matrix:
