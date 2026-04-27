@@ -1,72 +1,64 @@
 # Changelog
 
-## [v0.69.0] - 2026-04-20
+## [v0.70.0] - 2026-04-27
 
 ### Changed
-- Updated to NetBird v0.69.0
+- Updated to NetBird v0.70.0
 
 ### Upstream Release Notes
-## Release Notes for v0.69.0
+## Release Notes for v0.70.0
 
 ### What's New
-**Reverse Proxy IP Reputation Integration** 
-Now you can use CrowdSec to block malicious traffic based on IP reputation on your exposed service in the reverse proxy.
-
-This feature requires self-hosted installations to add another container to their deployment. See instructions in the [reverse proxy migration documentation](https://docs.netbird.io/selfhosted/migration/enable-reverse-proxy#step-7-optional-enable-crowd-sec-ip-reputation).
-
-> For Cloud users, support is coming soon.
-
-Learn more about [here](https://docs.netbird.io/docs/guides/reverse-proxy/).
-
-
-**macOS p2p connectivity improvements**
-We've improved macOS p2p connectivity with a better routing exclusion mechanism to avoid loops. Now the client doesn't add /32 routes per remote candidate addresses avoiding limitations on accessing remote peer's local addresses via tunnel connections. Learn more about [this change](https://github.com/netbirdio/netbird/pull/5918).
-> To use the old behavior run:
-> 
-> `sudo netbird service reconfigure --service-env "NB_USE_LEGACY_ROUTING=true"`
+#### Client signatures
+We've updated our Windows and MacOS installers and binary signatures. This means your users might be prompted again, but we expect minimum impact for most organizations. 
 
 #### Client Improvements
-- Added **PCP support**.  This change adds support for the PCP protocol to the client to improve the rate of P2P connectivity. 
-  https://github.com/netbirdio/netbird/pull/5219
-- Added **--disable-networks flag** to block network selection for users.  
-  https://github.com/netbirdio/netbird/pull/5896
-- Fixed **clearing service env vars with --service-env ""**.  
-  https://github.com/netbirdio/netbird/pull/5893
-- Guarded against **container DNAT bypass of ACL rules in iptables**.  
-  https://github.com/netbirdio/netbird/pull/5697
-- Populated **NetworkAddresses on iOS for posture checks**.  
-  https://github.com/netbirdio/netbird/pull/5900
-- Reconnected **conntrack netlink listener on error**.  
-  https://github.com/netbirdio/netbird/pull/5885
-- Replaced **exclusion routes with scoped default + IP_BOUND_IF on macOS**.  
-  https://github.com/netbirdio/netbird/pull/5918
-- Fixed **incorrect SSH client config combining Host and Match directives**.  
-  https://github.com/netbirdio/netbird/pull/5903
-- Fixed **WGIface.Close deadlock when DNS filter hook re-enters GetDevice**.  
-  https://github.com/netbirdio/netbird/pull/5916
+- Suppressed **ICE signaling**.  
+  https://github.com/netbirdio/netbird/pull/5820
+- Prefer **systemd-resolved stub over file mode** regardless of resolv.conf header.  
+  https://github.com/netbirdio/netbird/pull/5935
+- Trusted **wg interface in firewalld to bypass owner-flagged chains**.  
+  https://github.com/netbirdio/netbird/pull/5928
+- Added **TTL-based refresh to management DNS cache via handler chain**.  
+  https://github.com/netbirdio/netbird/pull/5945
+- Increased **gRPC health check timeout to 5s**.  
+  https://github.com/netbirdio/netbird/pull/5961
+- Improved test stability and reliability:  
+  https://github.com/netbirdio/netbird/pull/5953  
+  https://github.com/netbirdio/netbird/pull/5951  
+  https://github.com/netbirdio/netbird/pull/5950  
 
 #### Management Improvements
-- Enforced **peer or peer groups requirement for network routers**.  
-  https://github.com/netbirdio/netbird/pull/5894
-- Reused **single cache store across all management server consumers**.  
-  https://github.com/netbirdio/netbird/pull/5889
-- Fixed **lint error on Google Workspace integration**.  
-  https://github.com/netbirdio/netbird/pull/5907
+- Replaced **mailru/easyjson with netbirdio/easyjson fork**.  
+  https://github.com/netbirdio/netbird/pull/5938
+- Checked **policy changes before database updates**.  
+  https://github.com/netbirdio/netbird/pull/5405
+- Propagated **context changes to upstream middleware**.  
+  https://github.com/netbirdio/netbird/pull/5956
+- Added **changeable PAT rate limiting**.  
+  https://github.com/netbirdio/netbird/pull/5946
+- Excluded **already expired peers from expiration job**.  
+  https://github.com/netbirdio/netbird/pull/5970
+- Unified **peer-update test timeout via constant**.  
+  https://github.com/netbirdio/netbird/pull/5952
 
 #### Proxy Enhancements
-- Added **CrowdSec IP reputation integration for reverse proxy**.  
-  https://github.com/netbirdio/netbird/pull/5722
-- Added **direct redirect to SSO**.  
-  https://github.com/netbirdio/netbird/pull/5874
+- Set **session cookie path to root**.  
+  https://github.com/netbirdio/netbird/pull/5915
 
-#### Infrastructure Improvements
-- Updated **sign pipeline version to v0.1.2**.  
-  https://github.com/netbirdio/netbird/pull/5884
-- Added **CrowdSec LAPI container to self-hosted setup script**.  
-  https://github.com/netbirdio/netbird/pull/5880
+#### Self-Hosted Improvements
+- Added **reverse proxy retention fields to combined YAML**.  
+  https://github.com/netbirdio/netbird/pull/5930
+- Used **cscli lapi status for CrowdSec readiness check in installer**.  
+  https://github.com/netbirdio/netbird/pull/5949
+
+#### Infrastructure & Misc
+- Updated **sign pipeline version**.  
+  https://github.com/netbirdio/netbird/pull/5981
+- Updated **release pipeline version**.  
+  https://github.com/netbirdio/netbird/pull/5995
 
 ### New Contributors
-- @MichaelUray made their first contribution in https://github.com/netbirdio/netbird/pull/5900
-- @jnfrati made their first contribution in https://github.com/netbirdio/netbird/pull/5907
+- @alsruf36 made their first contribution in https://github.com/netbirdio/netbird/pull/5915
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.68.3...v0.69.0
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.69.0...v0.70.0
