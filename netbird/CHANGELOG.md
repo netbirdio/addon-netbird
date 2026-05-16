@@ -1,15 +1,15 @@
 # Changelog
 
-## [v0.71.1] - 2026-05-15
+## [v0.71.2] - 2026-05-16
 
 ### Changed
-- Updated to NetBird v0.71.1
+- Updated to NetBird v0.71.2
 
 ### Upstream Release Notes
 ## What's Changed
-* [client] Mirror v4 exit selection onto v6 pair and honour SkipAutoApply per route by @lixmal in https://github.com/netbirdio/netbird/pull/6150
-* [client] Drop DNS probes for passive health projection by @lixmal in https://github.com/netbirdio/netbird/pull/5971
-* [proxy] auth token generation on mapping  by @crn4 in https://github.com/netbirdio/netbird/pull/6157
+* [management] Avoid peer IP reallocation when account settings update preserves the network range by @lixmal in https://github.com/netbirdio/netbird/pull/6173
+* [management] Avoid context cancellation in `cancelPeerRoutines` by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6175
+* [client] Clean up legacy 32-bit and HKCU registry entries on Windows install by @lixmal in https://github.com/netbirdio/netbird/pull/6176
 
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.71.0...v0.71.1
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.71.1...v0.71.2
