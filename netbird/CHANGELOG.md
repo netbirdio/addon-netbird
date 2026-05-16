@@ -1,71 +1,15 @@
 # Changelog
 
-## [v0.71.0] - 2026-05-14
+## [v0.71.1] - 2026-05-15
 
 ### Changed
-- Updated to NetBird v0.71.0
+- Updated to NetBird v0.71.1
 
 ### Upstream Release Notes
-## Release Notes for v0.71.0
+## What's Changed
+* [client] Mirror v4 exit selection onto v6 pair and honour SkipAutoApply per route by @lixmal in https://github.com/netbirdio/netbird/pull/6150
+* [client] Drop DNS probes for passive health projection by @lixmal in https://github.com/netbirdio/netbird/pull/5971
+* [proxy] auth token generation on mapping  by @crn4 in https://github.com/netbirdio/netbird/pull/6157
 
-  ### What's New
 
-  **IPv6 overlay addressing**
-  NetBird's overlay is now dual-stack. Every account gets its own IPv6 prefix (default `/64`, configurable from `/48` to `/120`), and peers can receive both an IPv4 and an IPv6 overlay address. DNS serves AAAA
-  and reverse PTR records alongside A records, ACLs apply to both families automatically, network routes accept IPv6 CIDRs (with masquerade), exit nodes that route `0.0.0.0/0` get a matching `::/0` route, and
-  domain routes resolve both A and AAAA.
-
-  Rollout is group-gated: new accounts enable IPv6 for the **All** group by default; existing accounts opt in under **Settings > Network**. Assignment is also gated on a per-peer capability, so older clients keep
-   working on IPv4 until they upgrade. Hosts can opt out individually with `netbird up --disable-ipv6`
-
-  Read more in the [IPv6 Overlay Addressing announcement](https://netbird.io/knowledge-hub/ipv6-overlay-addressing) and the [IPv6 documentation](https://docs.netbird.io/manage/settings/ipv6).
-  https://github.com/netbirdio/netbird/pull/5631 by @lixmal
-
-  **MFA for local users**
-  Local users (non-IdP) can now enable multi-factor authentication, closing a gap for deployments that don't federate auth through an external provider.
-  https://github.com/netbirdio/netbird/pull/5804 by @jnfrati
-
-  **Bring your own proxy (backend ready)**
-  Backend support for per-account reverse-proxy lifecycle has landed: proxy tokens, per-account cluster allow-lists, conflict detection, and one-proxy-per-account enforcement. Full rollout (dashboard, docs) comes
-   in a later release.
-  https://github.com/netbirdio/netbird/pull/5627 by @crn4
-
-  #### Client Improvements
-  - Included **MTU and SSH auth config in debug bundle** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/6071
-  - Added **public key to debug bundle config.txt** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/6092
-  - iOS: **structured ResolvedIPs collection for domain routes** by @pappz.
-    https://github.com/netbirdio/netbird/pull/6090
-  - Used **unique temp file and clean up on failure when writing ssh config** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/6064
-  - Hardened **uspfilter conntrack and shared TCP relay** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/5936
-  - Skipped **DNS upstream failover on definitive EDE** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/6089
-  - Fixed **--config flag default to point at profile path** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/6122
-  - Bracketed **IPv6 in embed listeners, expanded debug bundle** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/6134
-  - Added **short flags for status command options** by @mlsmaycon.
-    https://github.com/netbirdio/netbird/pull/6137
-
-  #### Management Improvements
-  - Removed **permissions from geolocations API** by @pascal-fischer.
-    https://github.com/netbirdio/netbird/pull/6091
-  - Added **update reason to buffered calls** by @pascal-fischer.
-    https://github.com/netbirdio/netbird/pull/6103
-  - Allocated **and preserved IPv6 overlay addresses for embedded proxy peers** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/6132
-  - Fixed **offline statuses for public proxy clusters** by @crn4.
-    https://github.com/netbirdio/netbird/pull/6133
-  - Bracketed **IPv6 reverse-proxy target hosts when building URL Host field** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/6141
-
-  #### Relay Improvements
-  - Preserved **non-standard port in WS dialer URL prep** by @lixmal.
-    https://github.com/netbirdio/netbird/pull/6061
-
-  #### Misc
-  - Updated **CONTRIBUTING.md** by @mlsmaycon.
-    https://github.com/netbirdio/netbird/pull/6076
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.71.0...v0.71.1
