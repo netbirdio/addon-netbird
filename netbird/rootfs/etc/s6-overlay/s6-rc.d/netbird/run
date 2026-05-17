@@ -13,7 +13,17 @@ declare value
 readonly CONFIG_OLD_PATH=/homeassistant/netbird/config.json
 readonly CONFIG_PATH=/config/config.json
 
-[ -f "${CONFIG_OLD_PATH}" ] && mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}"
+if [ -f "${CONFIG_OLD_PATH}" ]; then
+    if [ -f "${CONFIG_PATH}" ]; then
+        bashio::log.warning "Migration skipped: ${CONFIG_PATH} already exists. Remove ${CONFIG_OLD_PATH} manually."
+    else
+        bashio::log.info "Migrating config from ${CONFIG_OLD_PATH} to ${CONFIG_PATH}"
+        if ! mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}"; then
+            bashio::log.error "Failed to migrate config from ${CONFIG_OLD_PATH} to ${CONFIG_PATH}"
+            bashio::exit.nok
+        fi
+    fi
+fi
 
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
@@ -27,29 +37,29 @@ options+=(--foreground-mode)
 options+=(--config "${CONFIG_PATH}")
 options+=(--log-file console)
 
-if [ "${admin_url}" = "" ]; then
+if [ "${admin_url}" = "" ] || [ "${admin_url}" = "null" ]; then
     bashio::log.info "Using Default Admin URL"
 else
     bashio::log.info "Using ${admin_url} as Admin URL"
     options+=(--admin-url "${admin_url}")
 fi
 
-if [ "${management_url}" = "" ]; then
+if [ "${management_url}" = "" ] || [ "${management_url}" = "null" ]; then
     bashio::log.info "Using Default Management URL"
 else
     bashio::log.info "Using ${management_url} as Management URL"
     options+=(--management-url "${management_url}")
 fi
 
-if [ "${setup_key}" = "" ]; then
+if [ "${setup_key}" = "" ] || [ "${setup_key}" = "null" ]; then
     bashio::log.info "No Setup Key Set"
     bashio::log.info "This client will only show up in dashboards it's already registered with."
 else
     bashio::log.info "Setup Key configured (hidden for security)"
-    options+=(--setup-key "${setup_key}")
+    export NB_SETUP_KEY="${setup_key}"
 fi
 
-if [ "${hostname}" = "" ]; then
+if [ "${hostname}" = "" ] || [ "${hostname}" = "null" ]; then
     bashio::log.info "No Hostname Set"
     bashio::log.info "This client will use the default (<docker container id>-netbird-client) as hostname in peers."
 else
@@ -88,17 +98,34 @@ for var in $(bashio::config 'env_vars|keys'); do
         continue
     fi
 
-    bashio::log.info "Setting ${name} to ${value}"
+    # Redact values for sensitive variable names
+    case "${name}" in
+        *KEY*|*SECRET*|*TOKEN*|*PASSWORD*)
+            bashio::log.info "Setting ${name} to [REDACTED]" ;;
+        *)
+            bashio::log.info "Setting ${name} to ${value}" ;;
+    esac
     export "${name}=${value}"
 done
 
 # Workaround for DNS resolution with systemd-resolved
 # NetBird checks for systemd-resolved by looking for a specific comment in /etc/resolv.conf
 # This ensures NetBird can properly detect and configure DNS settings on the host
-CONTENT=$(cat /etc/resolv.conf)
-echo '# systemd-resolved' > /etc/resolv.conf
-echo "$CONTENT" >> /etc/resolv.conf
+if ! grep -q '# systemd-resolved' /etc/resolv.conf 2>/dev/null; then
+    RESOLV_TMP=$(mktemp /tmp/resolv.conf.XXXXXX) || {
+        bashio::log.error "Failed to create temp file for resolv.conf workaround"
+        RESOLV_TMP=""
+    }
+    if [ -n "${RESOLV_TMP}" ]; then
+        if { printf '# systemd-resolved\n'; cat /etc/resolv.conf; } > "${RESOLV_TMP}" \
+            && mv -f "${RESOLV_TMP}" /etc/resolv.conf; then
+            bashio::log.debug "Prepended systemd-resolved marker to /etc/resolv.conf"
+        else
+            bashio::log.error "Failed to update /etc/resolv.conf for systemd-resolved workaround"
+            rm -f "${RESOLV_TMP}" 2>/dev/null
+        fi
+    fi
+fi
 
-bashio::log.info "Starting NetBird Client..."
-bashio::log.info "netbird up " "${options[@]}"
-netbird up "${options[@]}"
+bashio::log.info "Starting NetBird Client with ${#options[@]} options..."
+exec netbird up "${options[@]}"
