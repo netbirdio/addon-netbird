@@ -53,7 +53,7 @@ jobs:
           echo "Security checks passed: same-repo PR from Renovate branch"
 
       - name: Checkout PR branch
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
         with:
           # Use event payload ref which works reliably for same-repo PRs
           ref: ${{ github.event.pull_request.head.ref }}
