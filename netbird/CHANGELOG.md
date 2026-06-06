@@ -1,13 +1,13 @@
 # Changelog
 
-## [v0.71.4] - 2026-05-21
+## [v0.72.2] - 2026-06-06
 
 ### Changed
-- Updated to NetBird v0.71.4
+- Updated to NetBird v0.72.2
 
 ### Upstream Release Notes
 ## What's Changed
-* [client] Revert legacy registry cleanup on Windows install by @lixmal in https://github.com/netbirdio/netbird/pull/6232
+* [management] resolve private services on custom domains in synthesized DNS zones by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6348
 
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.71.3...v0.71.4
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.72.1...v0.72.2
