@@ -1,13 +1,13 @@
 # Changelog
 
-## [v0.72.2] - 2026-06-06
+## [v0.72.4] - 2026-06-12
 
 ### Changed
-- Updated to NetBird v0.72.2
+- Updated to NetBird v0.72.4
 
 ### Upstream Release Notes
 ## What's Changed
-* [management] resolve private services on custom domains in synthesized DNS zones by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6348
+* [client] Index peer tunnel IPs for faster PeerStateByIP lookup by @mlsmaycon in https://github.com/netbirdio/netbird/pull/6412
 
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.72.1...v0.72.2
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.72.3...v0.72.4
