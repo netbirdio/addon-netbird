@@ -6,8 +6,8 @@ FROM netbirdio/netbird:0.73.2 as netbird-container
 FROM ${BUILD_FROM}
 
 RUN apk add --no-cache \
-    iptables=1.8.11-r1 \
-    nftables=1.1.5-r2 \
+    iptables=1.8.13-r0 \
+    nftables=1.1.6-r1 \
     && ln -sf /sbin/xtables-nft-multi /sbin/ip6tables \
     && ln -sf /sbin/xtables-nft-multi /sbin/iptables
 
