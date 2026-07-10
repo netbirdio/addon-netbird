@@ -14,6 +14,8 @@ jobs:
   find:
     name: Find add-ons
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       addons: ${{ steps.addons.outputs.addons_list }}
     steps:
@@ -27,6 +29,8 @@ jobs:
   lint:
     name: Lint add-on ${{ matrix.path }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: find
     strategy:
       matrix:
