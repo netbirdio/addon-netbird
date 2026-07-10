@@ -93,7 +93,7 @@ Enabling Rosenpass on one peer assumes that all peers have Rosenpass enabled. If
 
 Extra environment variables
 
-Extra environment variables to pass to the NetBird client
+Extra environment variables to pass to the NetBird client.
 This is a list of environment variables that will be passed to the NetBird client.
 You can use this to configure the client further.
 

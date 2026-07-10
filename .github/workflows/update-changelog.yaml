@@ -82,8 +82,8 @@ jobs:
         id: release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
 
           # Fetch release notes from upstream repo
           RELEASE_BODY=$(gh api "repos/netbirdio/netbird/releases/tags/v${VERSION}" --jq '.body // empty' 2>/dev/null || echo "")
@@ -110,10 +110,11 @@ jobs:
           fi
 
       - name: Update CHANGELOG.md
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_DATE: ${{ steps.release.outputs.release_date }}
+          HAS_NOTES: ${{ steps.release.outputs.has_notes }}
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          RELEASE_DATE="${{ steps.release.outputs.release_date }}"
-          HAS_NOTES="${{ steps.release.outputs.has_notes }}"
           CHANGELOG_FILE="netbird/CHANGELOG.md"
 
           # Create fresh changelog with only the latest version
@@ -145,6 +146,9 @@ jobs:
           echo "Updated changelog with v${VERSION} entry (previous versions removed)"
 
       - name: Commit changes
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -155,7 +159,7 @@ jobs:
           fi
 
           git add netbird/CHANGELOG.md
-          git commit -m "📝 Update CHANGELOG.md for NetBird v${{ steps.version.outputs.version }}"
+          git commit -m "📝 Update CHANGELOG.md for NetBird v${VERSION}"
 
           # Push with retry logic to handle race conditions (e.g., Renovate force-push while running)
           MAX_RETRIES=3
@@ -167,7 +171,7 @@ jobs:
 
             if [ "$attempt" -lt "$MAX_RETRIES" ]; then
               echo "Push failed (attempt $attempt/$MAX_RETRIES), rebasing and retrying..."
-              git pull --rebase origin "${{ github.event.pull_request.head.ref }}"
+              git pull --rebase origin "$PR_HEAD_REF"
             fi
           done
 
