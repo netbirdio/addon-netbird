@@ -33,9 +33,7 @@ log_level="$(bashio::config 'log_level')"
 # the user has not set their own management_url, leaving self-hosted setups
 # untouched; NetBird then rewrites and persists the corrected URL on startup.
 if [ "${management_url}" = "" ] && [ -f "${CONFIG_PATH}" ]; then
-    current_mgmt_url="$(jq -r '.ManagementURL // empty' "${CONFIG_PATH}" 2>/dev/null)"
-    current_mgmt_host="${current_mgmt_url#*://}"
-    current_mgmt_host="${current_mgmt_host%%/*}"
+    current_mgmt_host="$(jq -r '.ManagementURL.Host // empty' "${CONFIG_PATH}" 2>/dev/null)"
     if [ "${current_mgmt_host%%:*}" = "app.netbird.io" ]; then
         bashio::log.warning "Persisted Management URL points at app.netbird.io (dashboard); correcting to https://api.netbird.io"
         management_url="https://api.netbird.io"
