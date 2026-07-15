@@ -112,7 +112,7 @@ jobs:
             echo "build_arch=false" >> $GITHUB_OUTPUT;
           elif [[ "$INFO_ARCHITECTURES" =~ $BUILD_ARCH ]]; then
             echo "build_arch=true" >> $GITHUB_OUTPUT;
-            echo "image=$(echo "$INFO_IMAGE" | cut -d'/' -f3)" >> $GITHUB_OUTPUT;
+            echo "image=$(echo "$INFO_IMAGE" | tr -d '"' | cut -d'/' -f3)" >> $GITHUB_OUTPUT;
             if [[ -z "$HEAD_REF" ]] && [[ "$EVENT_NAME" == "push" ]]; then
                 echo "BUILD_ARGS=" >> $GITHUB_ENV;
             fi
