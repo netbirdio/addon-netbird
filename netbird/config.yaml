@@ -1,9 +1,10 @@
 ---
 name: NetBird
-version: v0.74.3
+version: v0.74.6
 slug: netbird
 description: Connect your devices into a single secure private WireGuard®-based mesh network.
 url: https://github.com/netbirdio/addon-netbird
+image: ghcr.io/netbirdio/{arch}-addon-netbird
 startup: services
 panel_icon: mdi:vpn
 init: false
@@ -30,10 +31,10 @@ options:
   rosenpass_permissive: false
   env_vars: []
 schema:
-  admin_url: url?
-  management_url: url?
+  admin_url: str?
+  management_url: str?
   setup_key: str?
-  hostname: match(^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$)?
+  hostname: match(^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*)?$)?
   rosenpass: bool
   rosenpass_permissive: bool
   env_vars:
