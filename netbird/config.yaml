@@ -4,6 +4,7 @@ version: v0.74.6
 slug: netbird
 description: Connect your devices into a single secure private WireGuard®-based mesh network.
 url: https://github.com/netbirdio/addon-netbird
+image: ghcr.io/netbirdio/{arch}-addon-netbird
 startup: services
 panel_icon: mdi:vpn
 init: false
