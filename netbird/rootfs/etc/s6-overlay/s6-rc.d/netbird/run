@@ -23,6 +23,23 @@ rosenpass="$(bashio::config 'rosenpass')"
 rosenpass_permissive="$(bashio::config 'rosenpass_permissive')"
 log_level="$(bashio::config 'log_level')"
 
+# Self-heal a stale NetBird Cloud management URL (see issue #401).
+# Older installs persisted https://app.netbird.io as the Management URL in
+# config.json. app.netbird.io only serves the web dashboard and does not
+# negotiate the HTTP/2 ALPN that the management gRPC service requires, so the
+# client fails with "missing selected ALPN property" and never connects.
+# NetBird's built-in auto-migration ignores this host, so correct it here by
+# pointing the client at the real cloud management endpoint. Only applied when
+# the user has not set their own management_url, leaving self-hosted setups
+# untouched; NetBird then rewrites and persists the corrected URL on startup.
+if [ "${management_url}" = "" ] && [ -f "${CONFIG_PATH}" ]; then
+    current_mgmt_host="$(jq -r '.ManagementURL.Host // empty' "${CONFIG_PATH}" 2>/dev/null)"
+    if [ "${current_mgmt_host%%:*}" = "app.netbird.io" ]; then
+        bashio::log.warning "Persisted Management URL points at app.netbird.io (dashboard); correcting to https://api.netbird.io"
+        management_url="https://api.netbird.io"
+    fi
+fi
+
 options+=(--foreground-mode)
 options+=(--config "${CONFIG_PATH}")
 options+=(--log-file console)
