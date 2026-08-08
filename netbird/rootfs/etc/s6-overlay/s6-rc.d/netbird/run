@@ -11,17 +11,40 @@ declare value
 
 # Get the options configured in HASS GUI
 readonly CONFIG_OLD_PATH=/homeassistant/netbird/config.json
-readonly CONFIG_PATH=/config/config.json
+readonly CONFIG_DEFAULT_PATH=/config/config.json
+readonly PROFILES_DIR=/config/profiles
 
-[ -f "${CONFIG_OLD_PATH}" ] && mv "${CONFIG_OLD_PATH}" "${CONFIG_PATH}"
+[ -f "${CONFIG_OLD_PATH}" ] && mv "${CONFIG_OLD_PATH}" "${CONFIG_DEFAULT_PATH}"
 
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
 setup_key="$(bashio::config 'setup_key')"
 hostname="$(bashio::config 'hostname')"
+profile="$(bashio::config 'profile')"
 rosenpass="$(bashio::config 'rosenpass')"
 rosenpass_permissive="$(bashio::config 'rosenpass_permissive')"
 log_level="$(bashio::config 'log_level')"
+
+# Select the profile to run (see issue #423).
+# A NetBird profile is simply its own config file: each one holds a separate
+# peer identity, management URL and credentials, so pointing the client at a
+# different config file switches the whole account/network it joins. Leaving
+# the option empty keeps using the single default config, so existing installs
+# are unaffected.
+if [ "${profile}" = "" ] || [ "${profile}" = "null" ]; then
+    bashio::log.info "No profile set, using the default profile"
+    CONFIG_PATH="${CONFIG_DEFAULT_PATH}"
+else
+    # The profile name becomes part of a file path, so re-validate it here
+    # instead of relying on the options schema alone.
+    if [[ ! "${profile}" =~ ^[a-zA-Z0-9_-]{1,64}$ ]]; then
+        bashio::exit.nok "Invalid profile name: ${profile} (allowed: letters, digits, '-' and '_', up to 64 characters)"
+    fi
+    bashio::log.info "Using ${profile} as profile"
+    mkdir -p "${PROFILES_DIR}"
+    CONFIG_PATH="${PROFILES_DIR}/${profile}.json"
+fi
+readonly CONFIG_PATH
 
 # Self-heal a stale NetBird Cloud management URL (see issue #401).
 # Older installs persisted https://app.netbird.io as the Management URL in

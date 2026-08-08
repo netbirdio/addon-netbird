@@ -29,6 +29,17 @@ configuration:
     description: >-
       Hostname of the client (default "netbird-client")
       This is the name of the client that will be displayed in the NetBird dashboard.
+  profile:
+    name: Profile
+    description: >-
+      Name of the profile to connect with (default: the single, unnamed profile)
+
+      Every profile keeps its own peer identity and credentials in its own
+      configuration file, so switching the profile makes the add-on join a
+      different NetBird network or account. Changing this option and restarting
+      the add-on switches profiles, which also lets Home Assistant automations
+      switch networks. A profile that has not been registered yet needs a
+      `setup_key`, or the login URL printed in the log, on its first start.
   rosenpass:
     name: Rosenpass
     description: >-

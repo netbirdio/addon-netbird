@@ -27,6 +27,7 @@ options:
   management_url: ""
   setup_key: ""
   hostname: ""
+  profile: ""
   rosenpass: false
   rosenpass_permissive: false
   env_vars: []
@@ -35,6 +36,7 @@ schema:
   management_url: str?
   setup_key: str?
   hostname: match(^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*)?$)?
+  profile: match(^([a-zA-Z0-9_-]{1,64})?$)?
   rosenpass: bool
   rosenpass_permissive: bool
   env_vars:

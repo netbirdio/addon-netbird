@@ -75,6 +75,24 @@ Hostname in the NetBird network (used to during registration)
 
 This hostname will be used in the Peers to identify your machine.
 
+### Option: `profile`
+
+Name of the profile to connect with (default: the single, unnamed profile)
+
+A profile is a separate NetBird configuration: each one keeps its own peer
+identity and credentials, so switching the profile makes this client join a
+different NetBird network or account. Leave the option empty to keep using the
+single default configuration at `/addon_config/*_netbird/config.json`; set it to
+a name (letters, digits, `-` and `_`) and the client uses
+`/addon_config/*_netbird/profiles/<name>.json` instead.
+
+A profile that has not been registered yet needs a `setup_key`, or the login URL
+printed in the log, the first time it starts. Once registered, a profile keeps
+working when you switch away and back again.
+
+See [Switching profiles from Home Assistant](#switching-profiles-from-home-assistant)
+for changing profiles from an automation.
+
 ### Option: `rosenpass`
 
 Rosenpass can be enabled by setting a flag on client start-up.
@@ -96,6 +114,65 @@ Extra environment variables
 Extra environment variables to pass to the NetBird client.
 This is a list of environment variables that will be passed to the NetBird client.
 You can use this to configure the client further.
+
+## Switching profiles from Home Assistant
+
+Home Assistant can switch profiles by changing the `profile` option and
+restarting the add-on. Add the following to `configuration.yaml`, replacing
+`xxxxxxxx_netbird` with the slug of your installation (visible in the address bar
+when the add-on page is open):
+
+```yaml
+rest_command:
+  netbird_info:
+    url: http://supervisor/addons/xxxxxxxx_netbird/info
+    method: get
+    headers:
+      authorization: !env_var SUPERVISOR_TOKEN
+  netbird_set_options:
+    url: http://supervisor/addons/xxxxxxxx_netbird/options
+    method: post
+    content_type: application/json
+    headers:
+      authorization: !env_var SUPERVISOR_TOKEN
+    payload: '{{ {"options": options} | to_json }}'
+  netbird_restart:
+    url: http://supervisor/addons/xxxxxxxx_netbird/restart
+    method: post
+    headers:
+      authorization: !env_var SUPERVISOR_TOKEN
+
+script:
+  netbird_switch_profile:
+    alias: Switch NetBird profile
+    fields:
+      profile:
+        description: Profile to connect with, or empty for the default profile.
+        example: work
+    sequence:
+      - action: rest_command.netbird_info
+        response_variable: info
+      - action: rest_command.netbird_set_options
+        data:
+          options: "{{ info.content.data.options | combine({'profile': profile}) }}"
+      - action: rest_command.netbird_restart
+```
+
+Then call `script.netbird_switch_profile` with the profile you want:
+
+```yaml
+action: script.netbird_switch_profile
+data:
+  profile: work
+```
+
+Keep the `netbird_info` step. The Supervisor **replaces** the stored options with
+whatever is posted, so sending only the profile would reset every other option
+(including your `setup_key`) to its default. Reading the current options first
+and merging the new profile into them avoids that.
+
+Switching restarts the add-on, so the connection drops for a few seconds and all
+peers see the machine go offline and come back under its new identity.
 
 ## Changelog & Releases
 
