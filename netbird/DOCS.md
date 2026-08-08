@@ -28,7 +28,12 @@ comparison to installing any other Home Assistant add-on.
 
 ## Configuration
 
-You'll see the config file at `/addon_config/*_netbird/config.json` after first boot.
+After the first boot you'll see the NetBird configuration in this add-on's own
+configuration directory: `/config` as seen from inside the add-on, which Home
+Assistant exposes to you as `/addon_configs/xxxxxxxx_netbird`, where
+`xxxxxxxx_netbird` is the slug of your installation (visible in the address bar
+when the add-on page is open). It holds `config.json`, plus a `profiles`
+directory if you use the [`profile`](#option-profile) option.
 
 ### Option: `log_level`
 
@@ -82,9 +87,13 @@ Name of the profile to connect with (default: the single, unnamed profile)
 A profile is a separate NetBird configuration: each one keeps its own peer
 identity and credentials, so switching the profile makes this client join a
 different NetBird network or account. Leave the option empty to keep using the
-single default configuration at `/addon_config/*_netbird/config.json`; set it to
-a name (letters, digits, `-` and `_`) and the client uses
-`/addon_config/*_netbird/profiles/<name>.json` instead.
+single default configuration at `config.json`; set it to a name and the client
+uses `profiles/<name>.json` instead. Both paths are relative to the add-on
+configuration directory described under [Configuration](#configuration).
+
+A name may be up to 64 characters of letters, digits, `-` and `_`. The name
+`null` is not allowed, because the add-on cannot tell it apart from an unset
+option.
 
 A profile that has not been registered yet needs a `setup_key`, or the login URL
 printed in the log, the first time it starts. Once registered, a profile keeps
@@ -128,19 +137,19 @@ rest_command:
     url: http://supervisor/addons/xxxxxxxx_netbird/info
     method: get
     headers:
-      authorization: !env_var SUPERVISOR_TOKEN
+      x-supervisor-token: !env_var SUPERVISOR_TOKEN
   netbird_set_options:
     url: http://supervisor/addons/xxxxxxxx_netbird/options
     method: post
     content_type: application/json
     headers:
-      authorization: !env_var SUPERVISOR_TOKEN
+      x-supervisor-token: !env_var SUPERVISOR_TOKEN
     payload: '{{ {"options": options} | to_json }}'
   netbird_restart:
     url: http://supervisor/addons/xxxxxxxx_netbird/restart
     method: post
     headers:
-      authorization: !env_var SUPERVISOR_TOKEN
+      x-supervisor-token: !env_var SUPERVISOR_TOKEN
 
 script:
   netbird_switch_profile:
@@ -152,9 +161,14 @@ script:
     sequence:
       - action: rest_command.netbird_info
         response_variable: info
+      - condition: template
+        value_template: "{{ info.status == 200 }}"
       - action: rest_command.netbird_set_options
+        response_variable: updated
         data:
           options: "{{ info.content.data.options | combine({'profile': profile}) }}"
+      - condition: template
+        value_template: "{{ updated.status == 200 }}"
       - action: rest_command.netbird_restart
 ```
 
@@ -170,6 +184,18 @@ Keep the `netbird_info` step. The Supervisor **replaces** the stored options wit
 whatever is posted, so sending only the profile would reset every other option
 (including your `setup_key`) to its default. Reading the current options first
 and merging the new profile into them avoids that.
+
+Keep the two `condition` steps as well. A `rest_command` that gets an error
+response logs a warning but does not fail the script, so without them a rejected
+options update would still be followed by a restart, quietly bringing the add-on
+back up on the *old* profile. With them, the script stops instead and the add-on
+keeps running untouched.
+
+Because the whole options map has to be posted back, the payload contains your
+`setup_key`. Home Assistant logs that payload at warning level whenever one of
+these calls fails, and logs the payload and headers (including the Supervisor
+token) if you set `homeassistant.components.rest_command` to `debug`. Treat
+those logs as secrets, and scrub them before sharing them.
 
 Switching restarts the add-on, so the connection drops for a few seconds and all
 peers see the machine go offline and come back under its new identity.

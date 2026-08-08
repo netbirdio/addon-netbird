@@ -40,6 +40,9 @@ configuration:
       the add-on switches profiles, which also lets Home Assistant automations
       switch networks. A profile that has not been registered yet needs a
       `setup_key`, or the login URL printed in the log, on its first start.
+
+      Up to 64 characters of letters, digits, `-` and `_`. The name `null` is
+      not allowed, as it cannot be told apart from an unset option.
   rosenpass:
     name: Rosenpass
     description: >-
