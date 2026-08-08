@@ -14,7 +14,15 @@ readonly CONFIG_OLD_PATH=/homeassistant/netbird/config.json
 readonly CONFIG_DEFAULT_PATH=/config/config.json
 readonly PROFILES_DIR=/config/profiles
 
-[ -f "${CONFIG_OLD_PATH}" ] && mv "${CONFIG_OLD_PATH}" "${CONFIG_DEFAULT_PATH}"
+# Migrate the config from the pre-addon_config location, but never on top of an
+# existing one: that would discard the current peer identity and credentials.
+if [ -f "${CONFIG_OLD_PATH}" ]; then
+    if [ -f "${CONFIG_DEFAULT_PATH}" ]; then
+        bashio::log.warning "Ignoring ${CONFIG_OLD_PATH}: ${CONFIG_DEFAULT_PATH} already exists"
+    elif ! mv "${CONFIG_OLD_PATH}" "${CONFIG_DEFAULT_PATH}"; then
+        bashio::exit.nok "Could not migrate ${CONFIG_OLD_PATH} to ${CONFIG_DEFAULT_PATH}"
+    fi
+fi
 
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
