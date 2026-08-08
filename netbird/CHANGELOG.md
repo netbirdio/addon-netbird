@@ -1,48 +1,19 @@
 # Changelog
 
-## [v0.76.2] - 2026-08-07
+## [v0.76.3] - 2026-08-08
 
 ### Changed
-- Updated to NetBird v0.76.2
+- Updated to NetBird v0.76.3
 
 ### Upstream Release Notes
 ## What's Changed
-* [misc] add AGENTS.md file by @mlsmaycon in https://github.com/netbirdio/netbird/pull/7014
-* [client] Handle interface lookup errors in iOS DNS index helper by @Optic00 in https://github.com/netbirdio/netbird/pull/6999
-* [client] iOS - Remove duplicate Login RPCs from the iOS SDK by @evgeniyChepelev in https://github.com/netbirdio/netbird/pull/6931
-* [client] Declare GTK4/WebKitGTK runtime deps for the Linux UI packages by @pappz in https://github.com/netbirdio/netbird/pull/6893
-* [management] Generic gRPC extension seam for external modules by @bison in https://github.com/netbirdio/netbird/pull/6894
-* [management] Resolve agent network permissions per submodule by @mlsmaycon in https://github.com/netbirdio/netbird/pull/7030
-* [management] fix handling of empty network map during decode and encode by @pascal-fischer in https://github.com/netbirdio/netbird/pull/6987
-* [client] Keep the account email backing the SSO login hint correct by @pappz in https://github.com/netbirdio/netbird/pull/6986
-* [client] Android - Create the Android fake IP manager lazily on DNS flag enable by @pappz in https://github.com/netbirdio/netbird/pull/6989
-* [client] Android - Serialize Android tunnel reconfiguration callbacks by @pappz in https://github.com/netbirdio/netbird/pull/6990
-* [client] Keep the UI running when the notification service fails to start by @lixmal in https://github.com/netbirdio/netbird/pull/6959
-* [client] launch macOS GUI as the logged-in user after install/update by @riccardomanfrin in https://github.com/netbirdio/netbird/pull/6962
-* [client] Don't ask for an SSO login when the login never reached management by @lixmal in https://github.com/netbirdio/netbird/pull/6983
-* [misc] Add android and ios tags to PR title check by @pappz in https://github.com/netbirdio/netbird/pull/7037
-* [client, android] Pull fresh TUN settings on Android rebuild by @pappz in https://github.com/netbirdio/netbird/pull/6991
-* [client, android] Reuse the persisted configuration when enrolling by @camiloariza in https://github.com/netbirdio/netbird/pull/7022
-* [client, android] Reuse the profile's account for Android SSO logins by @pappz in https://github.com/netbirdio/netbird/pull/6988
-* [client] Update wails to v3.0.0-beta.3 by @pappz in https://github.com/netbirdio/netbird/pull/7038
-* [management] Align agent-network API contracts for API clients by @mlsmaycon in https://github.com/netbirdio/netbird/pull/7026
-* [client] Probe the daemon login with IsLoginRequired by @pappz in https://github.com/netbirdio/netbird/pull/7052
-* [client, android] Fix profile account path test on Windows by @pappz in https://github.com/netbirdio/netbird/pull/7057
-* [client] Fix session expired relogin by @pappz in https://github.com/netbirdio/netbird/pull/7055
-* [client] Fix Linux tray right-click opening the main window by @pappz in https://github.com/netbirdio/netbird/pull/7039
-* [management] prevent dangling group refs in agent-network ACLs. by @braginini in https://github.com/netbirdio/netbird/pull/7060
-* [management] Prevent deleting groups referenced by reverse proxy services by @mlsmaycon in https://github.com/netbirdio/netbird/pull/7062
-* [relay] randomize the relay reconnect backoff by @riccardomanfrin in https://github.com/netbirdio/netbird/pull/7067
-* [misc] Move enterprise setup to Traefik and harden migration by @bcmmbaga in https://github.com/netbirdio/netbird/pull/7042
-* [misc] Expand agent guidelines with security, type-safety and lifecycle conventions by @lixmal in https://github.com/netbirdio/netbird/pull/7076
-* [client] Ship a legacy GTK3 UI package for distros without WebKitGTK 6.0 by @pappz in https://github.com/netbirdio/netbird/pull/7040
-* [client] Add a UI setting to stay connected after quitting by @pappz in https://github.com/netbirdio/netbird/pull/7078
-* [infrastructure] Generate a session cookie encryption key on fresh self-hosted installs by @Optic00 in https://github.com/netbirdio/netbird/pull/7056
-* [client] Stop the macOS UI on pkg upgrade by @lixmal in https://github.com/netbirdio/netbird/pull/7079
-* [client] Reword the firewalld package comment by @lixmal in https://github.com/netbirdio/netbird/pull/7081
-* [client] Update the wails fork reference to the integration branch head by @pappz in https://github.com/netbirdio/netbird/pull/7087
+* [management] prewarm a posture check cache on network map generation by @pascal-fischer in https://github.com/netbirdio/netbird/pull/7093
+* [client] peer: re-arm the WireGuard watcher after a lazy wake by @riccardomanfrin in https://github.com/netbirdio/netbird/pull/7091
+* [infrastructure] Detect community GHCR images during enterprise migration by @jnfrati in https://github.com/netbirdio/netbird/pull/7101
+* [client] disambiguate the connection_type metric tag by @riccardomanfrin in https://github.com/netbirdio/netbird/pull/7043
+* [management] Affected peers for user updates by @pascal-fischer in https://github.com/netbirdio/netbird/pull/7099
+* [infrastructure] add grafana dashboard for licensed management by @mlsmaycon in https://github.com/netbirdio/netbird/pull/7095
+* [management] Deny reverse proxy access to pending and blocked users by @mlsmaycon in https://github.com/netbirdio/netbird/pull/7105
 
-## New Contributors
-* @camiloariza made their first contribution in https://github.com/netbirdio/netbird/pull/7022
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.76.1...v0.76.2
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.76.2...v0.76.3
