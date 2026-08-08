@@ -31,6 +31,9 @@ log_level="$(bashio::config 'log_level')"
 # different config file switches the whole account/network it joins. Leaving
 # the option empty keeps using the single default config, so existing installs
 # are unaffected.
+# bashio prints "null" for an option that is not set, and cannot tell that
+# apart from the literal string; the schema rejects "null" as a profile name so
+# the two can never collide here.
 if [ "${profile}" = "" ] || [ "${profile}" = "null" ]; then
     bashio::log.info "No profile set, using the default profile"
     CONFIG_PATH="${CONFIG_DEFAULT_PATH}"
