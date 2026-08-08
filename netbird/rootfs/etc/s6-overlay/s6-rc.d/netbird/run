@@ -70,6 +70,7 @@ fi
 
 if [ "${preshared_key}" = "" ]; then
     bashio::log.info "No Preshared Key Set"
+    options+=(--preshared-key "")
 else
     bashio::log.info "Preshared Key configured (hidden for security)"
     options+=(--preshared-key "${preshared_key}")
@@ -132,7 +133,11 @@ log_options=()
 redact_next=false
 for opt in "${options[@]}"; do
     if ${redact_next}; then
-        log_options+=("<redacted>")
+        if [ "${opt}" = "" ]; then
+            log_options+=("\"\"")
+        else
+            log_options+=("<redacted>")
+        fi
         redact_next=false
         continue
     fi

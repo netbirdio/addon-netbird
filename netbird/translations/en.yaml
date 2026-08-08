@@ -27,8 +27,8 @@ configuration:
   preshared_key:
     name: Preshared Key
     description: >-
-      Sets WireGuard PreSharedKey property.
-      If set, then only peers that have the same key can communicate.
+       Sets a WireGuard pre-shared key (PSK).
+       Only peers with the same key can communicate.
   hostname:
     name: Hostname
     description: >-

@@ -35,7 +35,7 @@ schema:
   admin_url: str?
   management_url: str?
   setup_key: str?
-  preshared_key: str?
+  preshared_key: password?
   hostname: match(^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*)?$)?
   rosenpass: bool
   rosenpass_permissive: bool
