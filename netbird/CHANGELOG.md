@@ -1,79 +1,113 @@
 # Changelog
 
-## [v0.77.0] - 2026-08-13
+## [v0.77.1] - 2026-08-21
 
 ### Changed
-- Updated to NetBird v0.77.0
+- Updated to NetBird v0.77.1
 
 ### Upstream Release Notes
-## Release Notes for v0.77.0
+## Release Notes for v0.77.1
 
 ### What's New
 
-#### Agent Network
-
-- Reworked Agent Network endpoint identity and settings bootstrap.
-  https://github.com/netbirdio/netbird/pull/7085
-
-- Added a proxy-connect authorizer seam for Agent Network.
-  https://github.com/netbirdio/netbird/pull/7136
-
-- Added reverse proxy usage accounting for activity tracking.
-  https://github.com/netbirdio/netbird/pull/7116
-
 #### Client Improvements
 
-- Added strict anonymization level and MAC address anonymization to debug bundles.
-  https://github.com/netbirdio/netbird/pull/7102
+- Fixed session extension and SSH authentication always using the device code flow on Linux.
+  https://github.com/netbirdio/netbird/pull/7187
 
-- Declared the `xdg-utils` dependency for NetBird UI packages.
-  https://github.com/netbirdio/netbird/pull/7126
+- Added Windows DNS configuration to the debug bundle.
+  https://github.com/netbirdio/netbird/pull/7196
 
-- Fixed credentials used for GTK3 package uploads.
-  https://github.com/netbirdio/netbird/pull/7125
+- Added a CI check for translation key parity.
+  https://github.com/netbirdio/netbird/pull/6852
 
-- Prevented WireGuard packets from being misrouted to the STUN handler.
-  https://github.com/netbirdio/netbird/pull/7059
+- Preserved the account email on Android logout while removing it when a profile is deleted.
+  https://github.com/netbirdio/netbird/pull/7200
 
-- Updated the NetBird Wails fork to remove the native WebView2 dependency.
-  https://github.com/netbirdio/netbird/pull/7128
+- Ranked Windows route candidates using combined route and interface metrics.
+  https://github.com/netbirdio/netbird/pull/7210
 
-- Migrated the relay QUIC tracer to qlog and upgraded `quic-go` to v0.59.1.
-  https://github.com/netbirdio/netbird/pull/7124
+- Skipped IPv6 route tests when the default next hop is unusable.
+  https://github.com/netbirdio/netbird/pull/7212
 
-- Derived Windows SSH privilege checks from the user token and group membership.
-  https://github.com/netbirdio/netbird/pull/6966
+- Passed the stored email as a login hint from the UI and preserved it on logout.
+  https://github.com/netbirdio/netbird/pull/7199
 
-- Adjusted the GTK3 release job.
-  https://github.com/netbirdio/netbird/pull/7163
+- Fixed inconsistencies in the CI `gomobile init` process.
+  https://github.com/netbirdio/netbird/pull/7229
 
-- Fixed a macOS DNS panic caused by malformed `scutil` output.
-  https://github.com/netbirdio/netbird/pull/7180
+- Deleted Windows NRPT rules by enumerating the registry instead of relying on a rule count.
+  https://github.com/netbirdio/netbird/pull/7195
 
-- Added a fallback to per-IP ACL rules when `ipset` is unavailable.
-  https://github.com/netbirdio/netbird/pull/6332
+- Declared multi-buffer support for the loopback XDP program.
+  https://github.com/netbirdio/netbird/pull/7230
 
-- Gated IPv6 forwarding on overlay IPv6 while preserving host Router Advertisement acceptance.
-  https://github.com/netbirdio/netbird/pull/6221
+- Exposed SSH functionality on Android.
+  https://github.com/netbirdio/netbird/pull/7156
 
-- Removed installer registry handlers for Windows autostart Run keys.
-  https://github.com/netbirdio/netbird/pull/7183
+- Handled Android network changes without restarting the engine.
+  https://github.com/netbirdio/netbird/pull/7144
 
-#### Infrastructure & Documentation
+- Cleared stale installer results before starting updates.
+  https://github.com/netbirdio/netbird/pull/7204
 
-- Added Crowdin configuration for UI translation synchronization.
-  https://github.com/netbirdio/netbird/pull/7155
+- Stopped the UI before silent Windows updates and suppressed installer reboots.
+  https://github.com/netbirdio/netbird/pull/7209
 
-- Fixed Crowdin export paths and export options.
-  https://github.com/netbirdio/netbird/pull/7162
+- Reported network addresses on Android for posture checks.
+  https://github.com/netbirdio/netbird/pull/7235
 
-- Updated the documentation to direct translation contributions to Crowdin.
-  https://github.com/netbirdio/netbird/pull/7161
+- Restarted the UI using the user's environment block after updates.
+  https://github.com/netbirdio/netbird/pull/7245
 
-- Allowed external test suites to reuse the NetBird end-to-end test harness.
-  https://github.com/netbirdio/netbird/pull/7176
+- Switched client tests to `go.uber.org/mock`.
+  https://github.com/netbirdio/netbird/pull/7253
 
-- Improved the release pipeline to build release branches and delay marking releases as "latest" until signing is complete.
-  https://github.com/netbirdio/netbird/pull/7171
+- Renamed TURN-specific WireGuard proxy terminology to relayed connections.
+  https://github.com/netbirdio/netbird/pull/7231
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.76.3...v0.77.0
+- Fixed staticcheck findings after upgrading `golangci-lint`.
+  https://github.com/netbirdio/netbird/pull/7266
+
+- Added missing anonymization and SSH privilege translations.
+  https://github.com/netbirdio/netbird/pull/7269
+
+- Added a lazy connection override and device name reporting to the WASM client.
+  https://github.com/netbirdio/netbird/pull/7276
+
+#### Management Improvements
+
+- Documented the mutual exclusivity of `ports` and `port_ranges` in policy rules.
+  https://github.com/netbirdio/netbird/pull/7158
+
+- Refused usage limits that one-off setup keys cannot honor.
+  https://github.com/netbirdio/netbird/pull/7220
+
+- Switched management tests to `go.uber.org/mock`.
+  https://github.com/netbirdio/netbird/pull/7253
+
+- Suppressed staticcheck warnings for deprecated protobuf fields.
+  https://github.com/netbirdio/netbird/pull/7261
+
+
+#### Infrastructure & Miscellaneous
+
+- Added support for non-interactive, environment-driven installations in `getting-started.sh`.
+  https://github.com/netbirdio/netbird/pull/7168
+
+- Updated the Agent Network documentation.
+  https://github.com/netbirdio/netbird/pull/7020
+
+- Prevented overriding the dashboard image in Enterprise migrations.
+  https://github.com/netbirdio/netbird/pull/7206
+
+- Skipped store migrations for PostgreSQL deployments.
+  https://github.com/netbirdio/netbird/pull/7207
+
+### New Contributors
+
+- @SunsetDrifter made their first contribution in https://github.com/netbirdio/netbird/pull/7158
+
+- @znel2002 made their first contribution in https://github.com/netbirdio/netbird/pull/7168
+
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.77.0...v0.77.1
