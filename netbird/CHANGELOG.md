@@ -1,113 +1,106 @@
 # Changelog
 
-## [v0.77.1] - 2026-08-21
+## [v0.78.0] - 2026-09-03
 
 ### Changed
-- Updated to NetBird v0.77.1
+- Updated to NetBird v0.78.0
 
 ### Upstream Release Notes
-## Release Notes for v0.77.1
+## Release Notes for v0.78.0
 
-### What's New
+## Highlights
 
-#### Client Improvements
+- **Rosenpass now works through the embedded reverse proxy** (#6763). Until now the proxy ran no
+  Rosenpass at all, so peers with Rosenpass enabled failed to establish through it on a PSK
+  mismatch — an incompatibility that was never documented. The proxy now runs Rosenpass in
+  **permissive** mode, so it connects both to Rosenpass-enabled peers and, exactly as before, to
+  peers without it. `NB_PROXY_ROSENPASS=false` turns it off.
+- **Lazy connections reworked**: per-peer lazy state, proxy peers lazy by default, and the lazy
+  exclusion list removed (#6762, #6763).
+- **Agent Network / LLM gateway**: agentgateway integration, access roles and self-service
+  endpoints, Bedrock model discovery served from the control plane, guardrail allowlists for
+  declared model ids, and the endpoint conformed to the LLM gateway protocol
+  (#7274, #7221, #7250, #7239, #7154, #7389, #7246).
+- **DNS on Windows**: a catch-all NRPT rule when NetBird is the primary resolver (#7071), closing
+  the leak/poisoning window towards the system resolvers.
+- **Local Prometheus metrics endpoint** on the client (#6689).
+- **Go 1.26** and `go-quic` v0.62.0 across client, relay and management (#7359).
+- **Unified ACL filtering** for peers and routes, with multi-source rules (#6322). An internal
+  refactor: no change is expected for standard deployments.
+- **Ukrainian localization** for the desktop client (#7035).
 
-- Fixed session extension and SSH authentication always using the device code flow on Linux.
-  https://github.com/netbirdio/netbird/pull/7187
+## Behaviour changes
 
-- Added Windows DNS configuration to the debug bundle.
-  https://github.com/netbirdio/netbird/pull/7196
+- Remote jobs (remote debug bundle and friends) are now **behind an admin opt-in**, with MDM
+  support (#7153). Anyone using them without the opt-in has to enable it.
+- Remote debug bundle jobs accept an anonymization level and an upload URL (#7147).
+- The client stays connected during the `login` command (#7384).
+- Logging out of the active profile is allowed even when profiles are disabled (#7360).
+- Profiles resolve for the invoking `sudo` user rather than for `root` (#7238).
+- NetBird traffic stays out of third-party fwmark rules (#7314).
+- GUI windows are created on demand and destroyed on close (#7096).
+- Android split tunnelling: the mode is typed rather than stored as a string, and settings are
+  kept per profile (#7387, #7349).
 
-- Added a CI check for translation key parity.
-  https://github.com/netbirdio/netbird/pull/6852
+## Security / hardening
 
-- Preserved the account email on Android logout while removing it when a profile is deleted.
-  https://github.com/netbirdio/netbird/pull/7200
+- The cached SSH JWT is bound to the local caller that obtained it (#7378).
+- The WireGuard key is no longer logged on a parse failure (#7379).
+- The client asks the OS for privileges when a guarded SSH setting is changed (#7066).
+- The proxy validates header auth (#7263).
+- Management checks a provider's URL and credential before saving them (#7301).
+- Clarified that `X-Peer-ID` on metrics ingest is not a credential (#7363).
+- The old `math/rand` library is gone from management (#6836).
 
-- Ranked Windows route candidates using combined route and interface metrics.
-  https://github.com/netbirdio/netbird/pull/7210
+## Client — fixes
 
-- Skipped IPv6 route tests when the default next hop is unusable.
-  https://github.com/netbirdio/netbird/pull/7212
+- Fixed the ICEBind races that wedge interface creation (#7377).
+- `agentConnecting` is dropped whenever the ICE session state clears (#7327).
+- A peer offer or answer arriving before the handshaker starts listening is held rather than lost
+  (#7255).
+- Connections are swept on network loss through a shared netevents manager (#7254).
+- Route selection survives an invalid request and is applied on a partial one (#7292).
+- The session-expiration dialog closes only on renewal (#7337).
+- A still-locked updater binary is tolerated when cleaning up after an update (#7286).
+- Fixed context cancellation during restart on iOS (#7329).
+- iOS SSO logins reuse the profile's account (#7193).
+- The iOS profile manager was migrated from Swift to Go (#6528).
+- The PCP implementation moved to the go-nat fork (#7282).
+- Reverted multi-buffer support declared for the loopback XDP program (#7303).
+- The Android TUN is renewed only when the routes it carries actually change (#7396).
+- Overlay listeners are rebuilt when the TUN is renewed (#7397).
+- The remote jobs opt-in is exposed in the Android and iOS SDK preferences (#7406).
 
-- Passed the stored email as a login hint from the UI and preserved it on logout.
-  https://github.com/netbirdio/netbird/pull/7199
+## Management — fixes
 
-- Fixed inconsistencies in the CI `gomobile init` process.
-  https://github.com/netbirdio/netbird/pull/7229
+- Fixed geolocation panics (#7382).
+- Fixed private services calculation on the new db path (#7383).
+- Fixed posture check evaluation for direct peers in policy definitions (#7348) and the affected
+  peers calculation on a posture check flip (#7347).
+- Handled the nil pointer in `sendInitialSync()` when the peer has been deleted (#7315).
+- Network map from the nmap data type (#6919).
 
-- Deleted Windows NRPT rules by enumerating the registry instead of relying on a rule count.
-  https://github.com/netbirdio/netbird/pull/7195
+## Self-hosted / infrastructure
 
-- Declared multi-buffer support for the loopback XDP program.
-  https://github.com/netbirdio/netbird/pull/7230
+- Better domain, Docker Compose and license validation in the self-hosted scripts (#7339).
+- The dashboard wasm client bump is triggered by release tags (#7277).
+- Protobuf breaking-change checks in CI (#7305).
+- Pinned the toolchain `gomobile init` needs for gobind (#7291).
+- Removed the mobile build validation workflow (#7302).
 
-- Exposed SSH functionality on Android.
-  https://github.com/netbirdio/netbird/pull/7156
+## Upgrade notes
 
-- Handled Android network changes without restarting the engine.
-  https://github.com/netbirdio/netbird/pull/7144
+- **Remote debug bundles now require an explicit opt-in** (#7153). Bundles requested by the
+  management server no longer run on a peer unless remote jobs are enabled there, with
+  `--allow-remote-jobs` on the client or the `allowRemoteJobs` managed setting. Deployments
+  relying on management-triggered debug bundles must opt in before they work again. The upload
+  destination can now be pinned by the operator, with MDM taking precedence over the
+  management-supplied value (#7147).
+- The embedded proxy now runs Rosenpass in permissive mode (#6763). Peers with Rosenpass enabled
+  can now use the reverse proxy, which previously failed on a PSK mismatch; peers without
+  Rosenpass keep connecting exactly as before. `NB_PROXY_ROSENPASS=false` disables it.
+- Proxy peers now default to lazy connections (#6762).
 
-- Cleared stale installer results before starting updates.
-  https://github.com/netbirdio/netbird/pull/7204
+Nothing else requires action.
 
-- Stopped the UI before silent Windows updates and suppressed installer reboots.
-  https://github.com/netbirdio/netbird/pull/7209
-
-- Reported network addresses on Android for posture checks.
-  https://github.com/netbirdio/netbird/pull/7235
-
-- Restarted the UI using the user's environment block after updates.
-  https://github.com/netbirdio/netbird/pull/7245
-
-- Switched client tests to `go.uber.org/mock`.
-  https://github.com/netbirdio/netbird/pull/7253
-
-- Renamed TURN-specific WireGuard proxy terminology to relayed connections.
-  https://github.com/netbirdio/netbird/pull/7231
-
-- Fixed staticcheck findings after upgrading `golangci-lint`.
-  https://github.com/netbirdio/netbird/pull/7266
-
-- Added missing anonymization and SSH privilege translations.
-  https://github.com/netbirdio/netbird/pull/7269
-
-- Added a lazy connection override and device name reporting to the WASM client.
-  https://github.com/netbirdio/netbird/pull/7276
-
-#### Management Improvements
-
-- Documented the mutual exclusivity of `ports` and `port_ranges` in policy rules.
-  https://github.com/netbirdio/netbird/pull/7158
-
-- Refused usage limits that one-off setup keys cannot honor.
-  https://github.com/netbirdio/netbird/pull/7220
-
-- Switched management tests to `go.uber.org/mock`.
-  https://github.com/netbirdio/netbird/pull/7253
-
-- Suppressed staticcheck warnings for deprecated protobuf fields.
-  https://github.com/netbirdio/netbird/pull/7261
-
-
-#### Infrastructure & Miscellaneous
-
-- Added support for non-interactive, environment-driven installations in `getting-started.sh`.
-  https://github.com/netbirdio/netbird/pull/7168
-
-- Updated the Agent Network documentation.
-  https://github.com/netbirdio/netbird/pull/7020
-
-- Prevented overriding the dashboard image in Enterprise migrations.
-  https://github.com/netbirdio/netbird/pull/7206
-
-- Skipped store migrations for PostgreSQL deployments.
-  https://github.com/netbirdio/netbird/pull/7207
-
-### New Contributors
-
-- @SunsetDrifter made their first contribution in https://github.com/netbirdio/netbird/pull/7158
-
-- @znel2002 made their first contribution in https://github.com/netbirdio/netbird/pull/7168
-
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.77.0...v0.77.1
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.77.1...v0.78.0
