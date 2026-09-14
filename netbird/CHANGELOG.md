@@ -1,13 +1,14 @@
 # Changelog
 
-## [v0.78.1] - 2026-09-04
+## [v0.78.2] - 2026-09-14
 
 ### Changed
-- Updated to NetBird v0.78.1
+- Updated to NetBird v0.78.2
 
 ### Upstream Release Notes
 ## What's Changed
-* [management] Serve networks with peer-based routers from the SQLite network map by @mlsmaycon in https://github.com/netbirdio/netbird/pull/7424
+* [client] Fix the Windows tray deadlock on re-entrant window creation by @pappz in https://github.com/netbirdio/netbird/pull/7537
+* [client] Bump wireguard-go to 8bf8fa968f1a by @pappz in https://github.com/netbirdio/netbird/pull/7538
 
 
-**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.78.0...v0.78.1
+**Full Changelog**: https://github.com/netbirdio/netbird/compare/v0.78.1...v0.78.2
