@@ -28,7 +28,12 @@ comparison to installing any other Home Assistant add-on.
 
 ## Configuration
 
-You'll see the config file at `/addon_config/*_netbird/config.json` after first boot.
+After the first boot you'll see the NetBird configuration in this add-on's own
+configuration directory: `/config` as seen from inside the add-on, which Home
+Assistant exposes to you as `/addon_configs/xxxxxxxx_netbird`, where
+`xxxxxxxx_netbird` is the slug of your installation (visible in the address bar
+when the add-on page is open). It holds `config.json`, plus a `profiles`
+directory if you use the [`profile`](#option-profile) option.
 
 ### Option: `log_level`
 
@@ -75,6 +80,28 @@ Hostname in the NetBird network (used to during registration)
 
 This hostname will be used in the Peers to identify your machine.
 
+### Option: `profile`
+
+Name of the profile to connect with (default: the single, unnamed profile)
+
+A profile is a separate NetBird configuration: each one keeps its own peer
+identity and credentials, so switching the profile makes this client join a
+different NetBird network or account. Leave the option empty to keep using the
+single default configuration at `config.json`; set it to a name and the client
+uses `profiles/<name>.json` instead. Both paths are relative to the add-on
+configuration directory described under [Configuration](#configuration).
+
+A name may be up to 64 characters of letters, digits, `-` and `_`. The name
+`null` is not allowed, because the add-on cannot tell it apart from an unset
+option.
+
+A profile that has not been registered yet needs a `setup_key`, or the login URL
+printed in the log, the first time it starts. Once registered, a profile keeps
+working when you switch away and back again.
+
+See [Switching profiles from Home Assistant](#switching-profiles-from-home-assistant)
+for changing profiles from an automation.
+
 ### Option: `rosenpass`
 
 Rosenpass can be enabled by setting a flag on client start-up.
@@ -96,6 +123,82 @@ Extra environment variables
 Extra environment variables to pass to the NetBird client.
 This is a list of environment variables that will be passed to the NetBird client.
 You can use this to configure the client further.
+
+## Switching profiles from Home Assistant
+
+Home Assistant can switch profiles by changing the `profile` option and
+restarting the add-on. Add the following to `configuration.yaml`, replacing
+`xxxxxxxx_netbird` with the slug of your installation (visible in the address bar
+when the add-on page is open):
+
+```yaml
+rest_command:
+  netbird_info:
+    url: http://supervisor/addons/xxxxxxxx_netbird/info
+    method: get
+    headers:
+      x-supervisor-token: !env_var SUPERVISOR_TOKEN
+  netbird_set_options:
+    url: http://supervisor/addons/xxxxxxxx_netbird/options
+    method: post
+    content_type: application/json
+    headers:
+      x-supervisor-token: !env_var SUPERVISOR_TOKEN
+    payload: '{{ {"options": options} | to_json }}'
+  netbird_restart:
+    url: http://supervisor/addons/xxxxxxxx_netbird/restart
+    method: post
+    headers:
+      x-supervisor-token: !env_var SUPERVISOR_TOKEN
+
+script:
+  netbird_switch_profile:
+    alias: Switch NetBird profile
+    fields:
+      profile:
+        description: Profile to connect with, or empty for the default profile.
+        example: work
+    sequence:
+      - action: rest_command.netbird_info
+        response_variable: info
+      - condition: template
+        value_template: "{{ info.status == 200 }}"
+      - action: rest_command.netbird_set_options
+        response_variable: updated
+        data:
+          options: "{{ info.content.data.options | combine({'profile': profile}) }}"
+      - condition: template
+        value_template: "{{ updated.status == 200 }}"
+      - action: rest_command.netbird_restart
+```
+
+Then call `script.netbird_switch_profile` with the profile you want:
+
+```yaml
+action: script.netbird_switch_profile
+data:
+  profile: work
+```
+
+Keep the `netbird_info` step. The Supervisor **replaces** the stored options with
+whatever is posted, so sending only the profile would reset every other option
+(including your `setup_key`) to its default. Reading the current options first
+and merging the new profile into them avoids that.
+
+Keep the two `condition` steps as well. A `rest_command` that gets an error
+response logs a warning but does not fail the script, so without them a rejected
+options update would still be followed by a restart, quietly bringing the add-on
+back up on the *old* profile. With them, the script stops instead and the add-on
+keeps running untouched.
+
+Because the whole options map has to be posted back, the payload contains your
+`setup_key`. Home Assistant logs that payload at warning level whenever one of
+these calls fails, and logs the payload and headers (including the Supervisor
+token) if you set `homeassistant.components.rest_command` to `debug`. Treat
+those logs as secrets, and scrub them before sharing them.
+
+Switching restarts the add-on, so the connection drops for a few seconds and all
+peers see the machine go offline and come back under its new identity.
 
 ## Changelog & Releases
 
