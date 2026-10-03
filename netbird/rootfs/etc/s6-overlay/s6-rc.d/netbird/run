@@ -5,6 +5,7 @@
 # Runs NetBird Client
 # ==============================================================================
 declare -a options
+declare -a log_options
 declare name
 declare value
 
@@ -18,6 +19,7 @@ readonly CONFIG_PATH=/config/config.json
 admin_url="$(bashio::config 'admin_url')"
 management_url="$(bashio::config 'management_url')"
 setup_key="$(bashio::config 'setup_key')"
+preshared_key="$(bashio::config 'preshared_key')"
 hostname="$(bashio::config 'hostname')"
 rosenpass="$(bashio::config 'rosenpass')"
 rosenpass_permissive="$(bashio::config 'rosenpass_permissive')"
@@ -64,6 +66,14 @@ if [ "${setup_key}" = "" ]; then
 else
     bashio::log.info "Setup Key configured (hidden for security)"
     options+=(--setup-key "${setup_key}")
+fi
+
+if [ "${preshared_key}" = "" ]; then
+    bashio::log.info "No Preshared Key Set"
+    options+=(--preshared-key "")
+else
+    bashio::log.info "Preshared Key configured (hidden for security)"
+    options+=(--preshared-key "${preshared_key}")
 fi
 
 if [ "${hostname}" = "" ]; then
@@ -117,5 +127,31 @@ echo '# systemd-resolved' > /etc/resolv.conf
 echo "$CONTENT" >> /etc/resolv.conf
 
 bashio::log.info "Starting NetBird Client..."
-bashio::log.info "netbird up " "${options[@]}"
+
+# Log a redacted command line to avoid leaking secret key material.
+log_options=()
+redact_next=false
+for opt in "${options[@]}"; do
+    if ${redact_next}; then
+        if [ "${opt}" = "" ]; then
+            log_options+=("\"\"")
+        else
+            log_options+=("<redacted>")
+        fi
+        redact_next=false
+        continue
+    fi
+
+    case "${opt}" in
+        --setup-key|--preshared-key)
+            log_options+=("${opt}")
+            redact_next=true
+            ;;
+        *)
+            log_options+=("${opt}")
+            ;;
+    esac
+done
+
+bashio::log.info "netbird up " "${log_options[@]}"
 netbird up "${options[@]}"

@@ -24,6 +24,11 @@ configuration:
       This token is like a password for connecting your client to NetBird, you can
       leave this option empty if you would prefer to login via a URL generated in
       the log with the `admin_url`.
+  preshared_key:
+    name: Preshared Key
+    description: >-
+       Sets a WireGuard pre-shared key (PSK).
+       Only peers with the same key can communicate.
   hostname:
     name: Hostname
     description: >-
