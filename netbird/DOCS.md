@@ -18,7 +18,7 @@ comparison to installing any other Home Assistant add-on.
    [![Open this add-on in your Home Assistant instance.][addon-badge]][addon]
 
 1. Install the "NetBird" add-on.
-1. If you are using the central NetBird instance you can either use the URL generated in the log or you can use a `setup_key`. If hosting your own then you'll want to set `admin_url` & `management_url` and again only need to set up the `setup_key` if you don't want to login via the log generated URL.
+1. If you are using the central NetBird instance you can either use the URL generated in the log or you can use a `setup_key`. If hosting your own then you'll want to set `management_url` and again only need to set up the `setup_key` if you don't want to login via the log generated URL.
 1. If you would like to change the auto generated hostname (which is the docker container id in case of hassio) set the `hostname`.
 1. If you would like to enable Rosenpass set the `rosenpass` to `true`.
 1. If you would like to enable Rosenpass in permissive way set the `rosenpass_permissive` to true.
@@ -49,13 +49,6 @@ more severe level, e.g., `debug` also shows `info` messages. By default,
 the `log_level` is set to `info`, which is the recommended setting unless
 you are troubleshooting.
 
-### Option: `admin_url`
-
-Admin Panel URL [http|https]://[host]:[port] (default "<https://app.netbird.io>")
-
-Tells NetBird the URL through which you administrate your NetBird clients.
-You'll find that the log generates a login URL you can use instead of configuring a `setup_key`. (If you're not already connected to a NetBird instance.)
-
 ### Option: `management_url`
 
 Management Service URL [http|https]://[host]:[port] (default "<https://api.netbird.io/>")
@@ -67,7 +60,7 @@ The client will use this URL to communicate with your NetBird instance api.
 Setup key obtained from the Management Service Dashboard (used to register peer)
 
 This token is like a password for connecting your client to NetBird, you can leave this
-option empty if you would prefer to login via a URL generated in the log with the `admin_url`.
+option empty if you would prefer to login via a URL generated in the log.
 
 ### Option: `hostname`
 
