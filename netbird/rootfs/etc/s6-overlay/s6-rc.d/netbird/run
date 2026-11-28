@@ -97,7 +97,12 @@ for var in $(bashio::config 'env_vars|keys'); do
         continue
     fi
 
-    bashio::log.info "Setting ${name} to ${value}"
+    # Mask credentials such as NB_SETUP_KEY in the log; the real value is still exported
+    if [[ "${name}" =~ (KEY|TOKEN|SECRET)$ ]]; then
+        bashio::log.info "Setting ${name} to <hidden>"
+    else
+        bashio::log.info "Setting ${name} to ${value}"
+    fi
     export "${name}=${value}"
 done
 

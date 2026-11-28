@@ -89,6 +89,8 @@ Extra environment variables
 Extra environment variables to pass to the NetBird client.
 This is a list of environment variables that will be passed to the NetBird client.
 You can use this to configure the client further.
+The add-on logs each variable on start. If a name ends in `KEY`, `TOKEN` or
+`SECRET` (for example `NB_SETUP_KEY`), the log shows `<hidden>` instead of the value.
 
 ## Changelog & Releases
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.84.0.2] - 2026-11-28
+
+### Fixed
+- Secrets set through `env_vars` are no longer shown in plain text in the app log. On every start, the add-on logged `Setting NAME to VALUE` for each variable, so a key passed as `NB_SETUP_KEY` appeared in the log. Values of variables whose names end in `KEY`, `TOKEN` or `SECRET` are now logged as `<hidden>`; the real value is still passed to NetBird.
+
 ## [v0.84.0.1] - 2026-11-28
 
 ### Fixed
