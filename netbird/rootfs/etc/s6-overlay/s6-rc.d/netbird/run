@@ -76,7 +76,13 @@ fi
 
 if ! ${rosenpass}; then
     bashio::log.info "Rosenpass disabled"
-    options+=(--enable-rosenpass=false)
+    # --enable-rosenpass is deprecated since NetBird v0.84.0 and prints a
+    # deprecation warning whenever it is passed, even as =false. Omitting it
+    # keeps the value persisted in config.json, so pass =false only when an
+    # earlier start left Rosenpass enabled there.
+    if [ -f "${CONFIG_PATH}" ] && [ "$(jq -r '.RosenpassEnabled // false' "${CONFIG_PATH}" 2>/dev/null)" = "true" ]; then
+        options+=(--enable-rosenpass=false)
+    fi
 else
     bashio::log.info "Rosenpass enabled"
     options+=(--enable-rosenpass)
