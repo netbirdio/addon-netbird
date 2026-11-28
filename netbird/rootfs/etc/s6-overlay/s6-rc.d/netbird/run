@@ -119,8 +119,9 @@ echo "$CONTENT" >> /etc/resolv.conf
 bashio::log.info "Starting NetBird Client..."
 # Mask the setup key in the logged command line; it is a credential (issue #468)
 log_options=("${options[@]}")
-for i in "${!log_options[@]}"; do
-    if [ "${log_options[i]}" = "--setup-key" ]; then
+for i in "${!options[@]}"; do
+    # Test the unmasked array, so an earlier mask cannot hide the real flag
+    if [ "${options[i]}" = "--setup-key" ]; then
         log_options[i+1]="<hidden>"
     fi
 done
