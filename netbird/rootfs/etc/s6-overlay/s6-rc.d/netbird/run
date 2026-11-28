@@ -9,6 +9,7 @@ declare -a log_options
 declare name
 declare value
 declare effective_psk
+declare psk_override
 
 
 # Get the options configured in HASS GUI
@@ -126,15 +127,22 @@ done
 # An empty pre-shared key clears the one NetBird saved earlier; say so.
 # NetBird lets NB_PRESHARED_KEY (then WT_PRESHARED_KEY) override the flag, so
 # check the value it will really use.
+psk_override=""
 if [ -n "${NB_PRESHARED_KEY+x}" ]; then
     effective_psk="${NB_PRESHARED_KEY}"
+    psk_override="NB_PRESHARED_KEY"
 elif [ -n "${WT_PRESHARED_KEY+x}" ]; then
     effective_psk="${WT_PRESHARED_KEY}"
+    psk_override="WT_PRESHARED_KEY"
 else
     effective_psk="${preshared_key}"
 fi
 if [ "${effective_psk}" = "" ] && [ -f "${CONFIG_PATH}" ] && [ -n "$(jq -r '.PreSharedKey // empty' "${CONFIG_PATH}" 2>/dev/null)" ]; then
-    bashio::log.warning "Clearing the pre-shared key saved in ${CONFIG_PATH}. Set the preshared_key option to keep using one."
+    if [ "${psk_override}" = "" ]; then
+        bashio::log.warning "Clearing the pre-shared key saved in ${CONFIG_PATH}. Set the preshared_key option to keep using one."
+    else
+        bashio::log.warning "Clearing the pre-shared key saved in ${CONFIG_PATH}: ${psk_override} in env_vars is empty and overrides the preshared_key option. Set a key in it, or remove it, to keep using one."
+    fi
 fi
 
 # Workaround for DNS resolution with systemd-resolved
