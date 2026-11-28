@@ -82,18 +82,6 @@ else
     options+=(--hostname "${hostname}")
 fi
 
-if ! ${rosenpass}; then
-    bashio::log.info "Rosenpass disabled"
-    options+=(--enable-rosenpass=false)
-else
-    bashio::log.info "Rosenpass enabled"
-    options+=(--enable-rosenpass)
-    if ${rosenpass_permissive}; then
-        bashio::log.info "Rosenpass permissive mode enabled"
-        options+=(--rosenpass-permissive)
-    fi
-fi
-
 if [ "${log_level}" = "" ] || [ "${log_level}" = "null" ]; then
     bashio::log.info "No log level Set"
     bashio::log.info "This client will use the default logging."
@@ -123,6 +111,38 @@ for var in $(bashio::config 'env_vars|keys'); do
     esac
     export "${name}=${value}"
 done
+
+if ! ${rosenpass}; then
+    bashio::log.info "Rosenpass disabled"
+    # --enable-rosenpass is deprecated since NetBird v0.84.0 and prints a
+    # deprecation warning whenever it is passed, even as =false. Omitting it
+    # keeps the value persisted in the config file, so pass =false only when an
+    # earlier start left Rosenpass enabled there.
+    # NetBird takes NB_CONFIG, then WT_CONFIG, in place of --config whenever the
+    # variable is set, even to "" (which selects its default profile file). An
+    # empty override leaves the file unknown, so keep the flag then.
+    if [ -n "${NB_CONFIG+x}" ]; then
+        rosenpass_config="${NB_CONFIG}"
+    elif [ -n "${WT_CONFIG+x}" ]; then
+        rosenpass_config="${WT_CONFIG}"
+    else
+        rosenpass_config="${CONFIG_PATH}"
+    fi
+    # NetBird decodes the file with Go's encoding/json: keys match with
+    # Unicode case folding (for this name only "ſ" folds beyond ASCII), the
+    # last match wins even for repeated identical keys, and null is skipped.
+    # --stream keeps repeated keys that a plain jq parse would collapse.
+    if [ -z "${rosenpass_config}" ] || { [ -f "${rosenpass_config}" ] && [ "$(jq -n -r --stream '[inputs | select(length == 2 and (.[0] | length) == 1) | select((.[0][0] | gsub("ſ"; "s") | ascii_downcase) == "rosenpassenabled") | .[1] | select(. != null)] | last == true' "${rosenpass_config}" 2>/dev/null)" = "true" ]; }; then
+        options+=(--enable-rosenpass=false)
+    fi
+else
+    bashio::log.info "Rosenpass enabled"
+    options+=(--enable-rosenpass)
+    if ${rosenpass_permissive}; then
+        bashio::log.info "Rosenpass permissive mode enabled"
+        options+=(--rosenpass-permissive)
+    fi
+fi
 
 # An empty pre-shared key clears the one NetBird saved earlier; say so.
 # NetBird lets NB_PRESHARED_KEY (then WT_PRESHARED_KEY) override the flag, so

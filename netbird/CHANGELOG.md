@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.84.0.3] - 2026-11-28
+
+### Fixed
+- Stopped the "Flag --enable-rosenpass has been deprecated" warning that NetBird v0.84.0 printed on every start with Rosenpass disabled. The add-on now passes `--enable-rosenpass=false` only when the NetBird config file still has Rosenpass enabled from an earlier start, so turning the option off still switches Rosenpass off. With Rosenpass enabled the warning remains, because NetBird has deprecated the feature itself.
+
 ## [v0.84.0.2] - 2026-11-28
 
 ### Added
