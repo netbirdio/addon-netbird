@@ -27,6 +27,7 @@ options:
   setup_key: ""
   preshared_key: ""
   hostname: ""
+  profile: ""
   rosenpass: false
   rosenpass_permissive: false
   env_vars: []
@@ -35,6 +36,7 @@ schema:
   setup_key: str?
   preshared_key: password?
   hostname: match(^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*)?$)?
+  profile: match(^(?!null$)([a-zA-Z0-9_-]{1,64})?$)?
   rosenpass: bool
   rosenpass_permissive: bool
   env_vars:
