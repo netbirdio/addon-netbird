@@ -43,7 +43,7 @@ There is no local build command. The CI system uses `home-assistant/builder` act
 ## Configuration Options
 
 User-configurable options (defined in config.yaml schema):
-- `admin_url` / `management_url`: Custom NetBird server URLs
+- `management_url`: Custom NetBird management server URL
 - `setup_key`: Registration key (optional if using login URL from logs)
 - `hostname`: Custom peer hostname
 - `rosenpass` / `rosenpass_permissive`: Post-quantum encryption settings

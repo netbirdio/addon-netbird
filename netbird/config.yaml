@@ -1,6 +1,6 @@
 ---
 name: NetBird
-version: v0.84.0
+version: v0.84.0.1
 slug: netbird
 description: Connect your devices into a single secure private WireGuard®-based mesh network.
 url: https://github.com/netbirdio/addon-netbird
@@ -23,7 +23,6 @@ map:
   - homeassistant_config:rw
   - addon_config:rw
 options:
-  admin_url: ""
   management_url: ""
   setup_key: ""
   hostname: ""
@@ -31,7 +30,6 @@ options:
   rosenpass_permissive: false
   env_vars: []
 schema:
-  admin_url: str?
   management_url: str?
   setup_key: str?
   hostname: match(^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*)?$)?
