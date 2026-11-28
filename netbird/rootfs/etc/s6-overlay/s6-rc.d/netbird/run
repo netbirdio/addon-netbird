@@ -5,8 +5,11 @@
 # Runs NetBird Client
 # ==============================================================================
 declare -a options
+declare -a log_options
 declare name
 declare value
+declare effective_psk
+declare psk_override
 
 
 # Get the options configured in HASS GUI
@@ -17,6 +20,7 @@ readonly CONFIG_PATH=/config/config.json
 
 management_url="$(bashio::config 'management_url')"
 setup_key="$(bashio::config 'setup_key')"
+preshared_key="$(bashio::config 'preshared_key')"
 hostname="$(bashio::config 'hostname')"
 rosenpass="$(bashio::config 'rosenpass')"
 rosenpass_permissive="$(bashio::config 'rosenpass_permissive')"
@@ -58,6 +62,18 @@ else
     options+=(--setup-key "${setup_key}")
 fi
 
+if [ "${preshared_key}" = "" ]; then
+    bashio::log.info "No Preshared Key Set"
+    options+=(--preshared-key "")
+else
+    # A WireGuard key is 32 bytes in base64: 43 characters and one '='.
+    if [[ ! "${preshared_key}" =~ ^[A-Za-z0-9+/]{43}=$ ]]; then
+        bashio::exit.nok "preshared_key must be a 44-character base64 WireGuard key (for example from 'wg genpsk')"
+    fi
+    bashio::log.info "Preshared Key configured (hidden for security)"
+    options+=(--preshared-key "${preshared_key}")
+fi
+
 if [ "${hostname}" = "" ]; then
     bashio::log.info "No Hostname Set"
     bashio::log.info "This client will use the default (<docker container id>-netbird-client) as hostname in peers."
@@ -97,9 +113,37 @@ for var in $(bashio::config 'env_vars|keys'); do
         continue
     fi
 
-    bashio::log.info "Setting ${name} to ${value}"
+    case "${name}" in
+        *KEY*|*TOKEN*|*SECRET*|*PASSWORD*)
+            bashio::log.info "Setting ${name} (value hidden)"
+            ;;
+        *)
+            bashio::log.info "Setting ${name} to ${value}"
+            ;;
+    esac
     export "${name}=${value}"
 done
+
+# An empty pre-shared key clears the one NetBird saved earlier; say so.
+# NetBird lets NB_PRESHARED_KEY (then WT_PRESHARED_KEY) override the flag, so
+# check the value it will really use.
+psk_override=""
+if [ -n "${NB_PRESHARED_KEY+x}" ]; then
+    effective_psk="${NB_PRESHARED_KEY}"
+    psk_override="NB_PRESHARED_KEY"
+elif [ -n "${WT_PRESHARED_KEY+x}" ]; then
+    effective_psk="${WT_PRESHARED_KEY}"
+    psk_override="WT_PRESHARED_KEY"
+else
+    effective_psk="${preshared_key}"
+fi
+if [ "${effective_psk}" = "" ] && [ -f "${CONFIG_PATH}" ] && [ -n "$(jq -r '.PreSharedKey // empty' "${CONFIG_PATH}" 2>/dev/null)" ]; then
+    if [ "${psk_override}" = "" ]; then
+        bashio::log.warning "Clearing the pre-shared key saved in ${CONFIG_PATH}. Set the preshared_key option to keep using one."
+    else
+        bashio::log.warning "Clearing the pre-shared key saved in ${CONFIG_PATH}: ${psk_override} in env_vars is empty and overrides the preshared_key option. Set a key in it, or remove it, to keep using one."
+    fi
+fi
 
 # Workaround for DNS resolution with systemd-resolved
 # NetBird checks for systemd-resolved by looking for a specific comment in /etc/resolv.conf
@@ -109,5 +153,20 @@ echo '# systemd-resolved' > /etc/resolv.conf
 echo "$CONTENT" >> /etc/resolv.conf
 
 bashio::log.info "Starting NetBird Client..."
-bashio::log.info "netbird up " "${options[@]}"
+
+# Log a redacted command line to avoid leaking secret key material.
+# Match the secret values themselves, so no other option value can shift the
+# mask off them.
+log_options=()
+for opt in "${options[@]}"; do
+    if [ "${opt}" = "" ]; then
+        log_options+=("\"\"")
+    elif [ "${opt}" = "${setup_key}" ] || [ "${opt}" = "${preshared_key}" ]; then
+        log_options+=("<redacted>")
+    else
+        log_options+=("${opt}")
+    fi
+done
+
+bashio::log.info "netbird up " "${log_options[@]}"
 netbird up "${options[@]}"
