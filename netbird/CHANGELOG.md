@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.84.0.2] - 2026-11-28
+
+### Fixed
+- The setup key is no longer shown in plain text in the app log. On every start, the add-on logged the full `netbird up` command, and that line included `--setup-key <key>`. The logged command now shows `--setup-key <hidden>`; the key is still passed to NetBird. ([#468](https://github.com/netbirdio/addon-netbird/issues/468))
+
 ## [v0.84.0.1] - 2026-11-28
 
 ### Fixed
