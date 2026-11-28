@@ -74,24 +74,6 @@ else
     options+=(--hostname "${hostname}")
 fi
 
-if ! ${rosenpass}; then
-    bashio::log.info "Rosenpass disabled"
-    # --enable-rosenpass is deprecated since NetBird v0.84.0 and prints a
-    # deprecation warning whenever it is passed, even as =false. Omitting it
-    # keeps the value persisted in config.json, so pass =false only when an
-    # earlier start left Rosenpass enabled there.
-    if [ -f "${CONFIG_PATH}" ] && [ "$(jq -r '.RosenpassEnabled // false' "${CONFIG_PATH}" 2>/dev/null)" = "true" ]; then
-        options+=(--enable-rosenpass=false)
-    fi
-else
-    bashio::log.info "Rosenpass enabled"
-    options+=(--enable-rosenpass)
-    if ${rosenpass_permissive}; then
-        bashio::log.info "Rosenpass permissive mode enabled"
-        options+=(--rosenpass-permissive)
-    fi
-fi
-
 if [ "${log_level}" = "" ] || [ "${log_level}" = "null" ]; then
     bashio::log.info "No log level Set"
     bashio::log.info "This client will use the default logging."
@@ -114,6 +96,26 @@ for var in $(bashio::config 'env_vars|keys'); do
     bashio::log.info "Setting ${name} to ${value}"
     export "${name}=${value}"
 done
+
+if ! ${rosenpass}; then
+    bashio::log.info "Rosenpass disabled"
+    # --enable-rosenpass is deprecated since NetBird v0.84.0 and prints a
+    # deprecation warning whenever it is passed, even as =false. Omitting it
+    # keeps the value persisted in config.json, so pass =false only when an
+    # earlier start left Rosenpass enabled there. NetBird reads NB_CONFIG (or
+    # legacy WT_CONFIG) from env_vars in place of --config, so check that file.
+    rosenpass_config="${NB_CONFIG:-${WT_CONFIG:-${CONFIG_PATH}}}"
+    if [ -f "${rosenpass_config}" ] && [ "$(jq -r '.RosenpassEnabled // false' "${rosenpass_config}" 2>/dev/null)" = "true" ]; then
+        options+=(--enable-rosenpass=false)
+    fi
+else
+    bashio::log.info "Rosenpass enabled"
+    options+=(--enable-rosenpass)
+    if ${rosenpass_permissive}; then
+        bashio::log.info "Rosenpass permissive mode enabled"
+        options+=(--rosenpass-permissive)
+    fi
+fi
 
 # Workaround for DNS resolution with systemd-resolved
 # NetBird checks for systemd-resolved by looking for a specific comment in /etc/resolv.conf
