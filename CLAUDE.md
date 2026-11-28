@@ -45,6 +45,7 @@ There is no local build command. The CI system uses `home-assistant/builder` act
 User-configurable options (defined in config.yaml schema):
 - `management_url`: Custom NetBird management server URL
 - `setup_key`: Registration key (optional if using login URL from logs)
+- `preshared_key`: WireGuard pre-shared key (44-char base64; empty clears a saved key)
 - `hostname`: Custom peer hostname
 - `rosenpass` / `rosenpass_permissive`: Post-quantum encryption settings
 - `env_vars`: Additional `NB_*` environment variables

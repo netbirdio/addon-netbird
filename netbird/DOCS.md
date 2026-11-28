@@ -62,6 +62,19 @@ Setup key obtained from the Management Service Dashboard (used to register peer)
 This token is like a password for connecting your client to NetBird, you can leave this
 option empty if you would prefer to login via a URL generated in the log.
 
+### Option: `preshared_key`
+
+WireGuard pre-shared key (PSK), an extra symmetric key on top of the WireGuard keys.
+
+The key is 44 characters of base64, for example the output of `wg genpsk`. The add-on
+refuses to start with any other value. Every peer that must talk to this one needs the
+same key: peers with a different key, or none, cannot connect to it.
+
+Leave the option empty to run without a PSK. An empty value also clears a key that the
+client saved earlier; the add-on log shows a warning when that happens.
+
+An `NB_PRESHARED_KEY` entry in `env_vars` takes precedence over this option.
+
 ### Option: `hostname`
 
 Hostname in the NetBird network (used to during registration)

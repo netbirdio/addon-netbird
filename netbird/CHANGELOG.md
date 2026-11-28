@@ -5,6 +5,15 @@
 ### Fixed
 - Stopped the "Flag --enable-rosenpass has been deprecated" warning that NetBird v0.84.0 printed on every start with Rosenpass disabled. The add-on now passes `--enable-rosenpass=false` only when the NetBird config file still has Rosenpass enabled from an earlier start, so turning the option off still switches Rosenpass off. With Rosenpass enabled the warning remains, because NetBird has deprecated the feature itself.
 
+## [v0.84.0.2] - 2026-11-28
+
+### Added
+- New `preshared_key` option to set a WireGuard pre-shared key (PSK). The add-on refuses to start if the value is not a 44-character base64 key. Leaving the option empty clears a key saved earlier, and the log warns when that happens.
+
+### Changed
+- The logged `netbird up` command now hides the setup key and the pre-shared key.
+- `env_vars` values whose name contains `KEY`, `TOKEN`, `SECRET` or `PASSWORD` are no longer written to the log.
+
 ## [v0.84.0.1] - 2026-11-28
 
 ### Fixed
