@@ -116,11 +116,21 @@ if ! ${rosenpass}; then
     bashio::log.info "Rosenpass disabled"
     # --enable-rosenpass is deprecated since NetBird v0.84.0 and prints a
     # deprecation warning whenever it is passed, even as =false. Omitting it
-    # keeps the value persisted in config.json, so pass =false only when an
-    # earlier start left Rosenpass enabled there. NetBird reads NB_CONFIG (or
-    # legacy WT_CONFIG) from env_vars in place of --config, so check that file.
-    rosenpass_config="${NB_CONFIG:-${WT_CONFIG:-${CONFIG_PATH}}}"
-    if [ -f "${rosenpass_config}" ] && [ "$(jq -r '.RosenpassEnabled // false' "${rosenpass_config}" 2>/dev/null)" = "true" ]; then
+    # keeps the value persisted in the config file, so pass =false only when an
+    # earlier start left Rosenpass enabled there.
+    # NetBird takes NB_CONFIG, then WT_CONFIG, in place of --config whenever the
+    # variable is set, even to "" (which selects its default profile file). An
+    # empty override leaves the file unknown, so keep the flag then.
+    if [ -n "${NB_CONFIG+x}" ]; then
+        rosenpass_config="${NB_CONFIG}"
+    elif [ -n "${WT_CONFIG+x}" ]; then
+        rosenpass_config="${WT_CONFIG}"
+    else
+        rosenpass_config="${CONFIG_PATH}"
+    fi
+    # NetBird decodes the file with Go's encoding/json, which matches keys
+    # case-insensitively; the last matching key wins.
+    if [ -z "${rosenpass_config}" ] || { [ -f "${rosenpass_config}" ] && [ "$(jq -r '[to_entries[] | select(.key | ascii_downcase == "rosenpassenabled") | .value] | last == true' "${rosenpass_config}" 2>/dev/null)" = "true" ]; }; then
         options+=(--enable-rosenpass=false)
     fi
 else
