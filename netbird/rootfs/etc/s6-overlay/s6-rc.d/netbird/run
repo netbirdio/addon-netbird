@@ -128,10 +128,11 @@ if ! ${rosenpass}; then
     else
         rosenpass_config="${CONFIG_PATH}"
     fi
-    # NetBird decodes the file with Go's encoding/json, which matches keys
-    # case-insensitively; the last matching key wins, and a null value leaves
-    # the earlier one in place.
-    if [ -z "${rosenpass_config}" ] || { [ -f "${rosenpass_config}" ] && [ "$(jq -r '[to_entries[] | select((.key | ascii_downcase) == "rosenpassenabled" and .value != null) | .value] | last == true' "${rosenpass_config}" 2>/dev/null)" = "true" ]; }; then
+    # NetBird decodes the file with Go's encoding/json: keys match with
+    # Unicode case folding (for this name only "ſ" folds beyond ASCII), the
+    # last match wins even for repeated identical keys, and null is skipped.
+    # --stream keeps repeated keys that a plain jq parse would collapse.
+    if [ -z "${rosenpass_config}" ] || { [ -f "${rosenpass_config}" ] && [ "$(jq -n -r --stream '[inputs | select(length == 2 and (.[0] | length) == 1) | select((.[0][0] | gsub("ſ"; "s") | ascii_downcase) == "rosenpassenabled") | .[1] | select(. != null)] | last == true' "${rosenpass_config}" 2>/dev/null)" = "true" ]; }; then
         options+=(--enable-rosenpass=false)
     fi
 else
