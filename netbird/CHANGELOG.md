@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.84.0.1] - 2026-11-28
+
+### Fixed
+- Removed the `admin_url` option. NetBird v0.84.0 dropped the `--admin-url` flag, so the add-on failed to start when the option was set. A previously saved `admin_url` value is ignored: Home Assistant logs a warning and drops it.
+
 ## [v0.84.0] - 2026-11-27
 
 ### Changed
