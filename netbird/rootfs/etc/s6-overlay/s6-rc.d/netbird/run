@@ -8,6 +8,7 @@ declare -a options
 declare -a log_options
 declare name
 declare value
+declare redact_next
 
 
 # Get the options configured in HASS GUI
@@ -62,8 +63,16 @@ fi
 
 if [ "${preshared_key}" = "" ]; then
     bashio::log.info "No Preshared Key Set"
+    # An empty --preshared-key clears a key NetBird saved earlier; say so.
+    if [ -f "${CONFIG_PATH}" ] && [ -n "$(jq -r '.PreSharedKey // empty' "${CONFIG_PATH}" 2>/dev/null)" ]; then
+        bashio::log.warning "Clearing the pre-shared key saved in ${CONFIG_PATH}. Set the preshared_key option to keep using one."
+    fi
     options+=(--preshared-key "")
 else
+    # A WireGuard key is 32 bytes in base64: 43 characters and one '='.
+    if [[ ! "${preshared_key}" =~ ^[A-Za-z0-9+/]{43}=$ ]]; then
+        bashio::exit.nok "preshared_key must be a 44-character base64 WireGuard key (for example from 'wg genpsk')"
+    fi
     bashio::log.info "Preshared Key configured (hidden for security)"
     options+=(--preshared-key "${preshared_key}")
 fi

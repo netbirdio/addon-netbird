@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.84.0.2] - 2026-11-28
+
+### Added
+- New `preshared_key` option to set a WireGuard pre-shared key (PSK). The add-on refuses to start if the value is not a 44-character base64 key. Leaving the option empty clears a key saved earlier, and the log warns when that happens.
+
+### Changed
+- The logged `netbird up` command now hides the setup key and the pre-shared key.
+
 ## [v0.84.0.1] - 2026-11-28
 
 ### Fixed
