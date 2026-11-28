@@ -7,6 +7,7 @@
 
 ### Changed
 - The logged `netbird up` command now hides the setup key and the pre-shared key.
+- `env_vars` values whose name contains `KEY`, `TOKEN`, `SECRET` or `PASSWORD` are no longer written to the log.
 
 ## [v0.84.0.1] - 2026-11-28
 
